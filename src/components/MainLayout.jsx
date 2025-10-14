@@ -1,6 +1,7 @@
 import { Link, Outlet, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.jsx';
-import Dropdown from './Dropdown.jsx'; 
+import Dropdown from './Dropdown.jsx';
+import mi_logo from '../assets/mi_logo.png';
 
 
 const mantenimientoItems = [
@@ -31,8 +32,14 @@ function MainLayout() {
   return (
     <>
       <header className="navbar modern">
-        <Link to="/" className="navbar-brand">MIFARMA</Link>
-        
+        <Link to="/" className="navbar-brand">
+          <img
+            src={mi_logo}
+            alt="MIFARMA Logo"
+            className="navbar-logo"
+          />
+        </Link>
+
         <nav className="navbar-main-links">
           <Link to="/" className="nav-item">
             Home
@@ -50,7 +57,9 @@ function MainLayout() {
         <div className="navbar-auth">
           {user ? (
             <div className="navbar-user">
-              <span>Bienvenido, {user.nombre}</span>
+              <span className="user-greeting">
+                Bienvenido, <strong>{user.nombre}</strong>
+              </span>
               <button onClick={handleLogout} className="logout-button">Cerrar Sesión</button>
             </div>
           ) : (
@@ -64,7 +73,7 @@ function MainLayout() {
 
       <main className="container">
         {/* Aquí se renderizarán las páginas correspondientes a las rutas */}
-        <Outlet /> 
+        <Outlet />
       </main>
     </>
   );
