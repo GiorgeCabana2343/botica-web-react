@@ -5,9 +5,9 @@ import mi_logo from '../assets/mi_logo.png';
 
 
 const mantenimientoItems = [
-  { title: 'Medicamentos', subtitle: 'Gestionar productos farmacéuticos', path: '/medicamentos', icon: '💊' },
+  { title: 'Medicamentos', subtitle: 'Gestionar productos farmacéuticos', path: '/registrar-medicamento', icon: '💊' },
   { title: 'Tipos de Medicamentos', subtitle: 'Categorías de productos', path: '/tipos-medicamento', icon: '🏷️' },
-  { title: 'Laboratorios', subtitle: 'Gestionar proveedores', path: '/laboratorios', icon: '🔬' },
+  { title: 'Laboratorios', subtitle: 'Gestionar proveedores', path: '/registrar-laboratorio', icon: '🔬' },
 ];
 
 const inventarioItems = [
