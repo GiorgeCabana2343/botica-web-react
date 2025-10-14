@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 function Dropdown({ title, items = [] }) {
@@ -19,23 +19,22 @@ function Dropdown({ title, items = [] }) {
 
   return (
     <div className="dropdown" ref={dropdownRef}>
-      <button 
-        className="dropdown-toggle" 
+      <button
+        className="dropdown-toggle"
         onClick={() => setIsOpen(!isOpen)}
-        onMouseEnter={() => setIsOpen(true)}
-        onMouseLeave={() => setIsOpen(false)}
       >
         {title} <span className="arrow">{isOpen ? '▲' : '▼'}</span>
       </button>
-      
+
       {isOpen && (
-        <div 
-          className="dropdown-menu"
-          onMouseEnter={() => setIsOpen(true)}
-          onMouseLeave={() => setIsOpen(false)}
-        >
+        <div className="dropdown-menu">
           {items.map((item, index) => (
-            <Link to={item.path} key={index} className="dropdown-item" onClick={() => setIsOpen(false)}>
+            <Link
+              to={item.path}
+              key={index}
+              className="dropdown-item"
+              onClick={() => setIsOpen(false)}
+            >
               {item.icon && <span className="dropdown-item-icon">{item.icon}</span>}
               <div className="dropdown-item-text">
                 <strong>{item.title}</strong>
