@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import API from "../api/api.js";
-import "../styles/RegistroMedicamento.css"
+import API from "../../backend/conexion.js";
+import "./Medicamento.css"
 
 
 function RegistroMedicamento() {

@@ -6,15 +6,15 @@ import mi_logo from '../assets/mi_logo.png';
 
 const mantenimientoItems = [
   { title: 'Medicamentos', subtitle: 'Gestionar productos farmacéuticos', path: '/registrar-medicamento', icon: '💊' },
-  { title: 'Tipos de Medicamentos', subtitle: 'Categorías de productos', path: '/tipos-medicamento', icon: '🏷️' },
+  { title: 'Tipos de Medicamentos', subtitle: 'Categorías de productos', path: '/registrar-tipos-medicamento', icon: '🏷️' },
   { title: 'Laboratorios', subtitle: 'Gestionar proveedores', path: '/registrar-laboratorio', icon: '🔬' },
 ];
 
 const inventarioItems = [
-  { title: 'Actualizar Medicamento', subtitle: 'Editar precios, descripciones, etc.', path: '/inventario/actualizar-medicamento', icon: '✏️' },
-  { title: 'Actualizar Stock', subtitle: 'Añadir o quitar unidades del inventario', path: '/inventario/actualizar-stock', icon: '📦' },
-  { title: 'Medicamentos por Laboratorio', subtitle: 'Ver productos agrupados por proveedor', path: '/reportes/por-laboratorio', icon: '📊' },
-  { title: 'Medicamentos por Tipo', subtitle: 'Ver productos agrupados por categoría', path: '/reportes/por-tipo', icon: '📈' },
+  { title: 'Actualizar Medicamento', subtitle: 'Editar precios, descripciones, etc.', path: '/actualizar-medicamento', icon: '✏️' },
+  { title: 'Actualizar Stock', subtitle: 'Añadir o quitar unidades del inventario', path: '/actualizar-stock', icon: '📦' },
+  { title: 'Medicamentos por Laboratorio', subtitle: 'Ver productos agrupados por proveedor', path: '/medicamento/por-laboratorio', icon: '📊' },
+  { title: 'Medicamentos por Tipo', subtitle: 'Ver productos agrupados por categoría', path: '/medicamento-por-tipo', icon: '📈' },
 ];
 
 

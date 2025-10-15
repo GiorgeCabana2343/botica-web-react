@@ -1,96 +1,93 @@
-import { useEffect, useState } from "react";
-import API from "../api/api.js";
-import "../styles/TipoMedicamento.css";
+import { useState, useEffect } from "react";
+import API from "../../backend/conexion.js";
+import "./Laboratorio.css";
 
-function TipoMedicamento() {
-  const [tipos, setTipos] = useState([]);
+function RegistroLaboratorio() {
+  const [laboratorios, setLaboratorios] = useState([]);
   const [filtro, setFiltro] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [nuevo, setNuevo] = useState({ descripcion: "" });
   const [showToast, setShowToast] = useState(false);
 
-  // Cargar tipos de medicamento
+  // Cargar laboratorios
   useEffect(() => {
-    const fetchTipos = async () => {
+    const fetchLaboratorios = async () => {
       try {
-        const res = await API.get("/tipoMedicamentos");
-        setTipos(res.data);
+        const res = await API.get("/laboratorios");
+        setLaboratorios(res.data);
       } catch (err) {
-        console.error("Error al cargar tipos:", err);
+        console.error("Error al cargar laboratorios:", err);
       }
     };
-    fetchTipos();
+    fetchLaboratorios();
   }, []);
 
-  // Filtro en tiempo real
-  const tiposFiltrados = tipos.filter((t) =>
-    t.descripcion.toLowerCase().includes(filtro.toLowerCase())
+  // Filtrado en tiempo real
+  const laboratoriosFiltrados = laboratorios.filter((l) =>
+    l.descripcion.toLowerCase().includes(filtro.toLowerCase())
   );
 
-  // Registrar nuevo tipo
+  // Registrar nuevo laboratorio
   const handleRegistrar = async (e) => {
     e.preventDefault();
     try {
-      await API.post("/tipoMedicamentos", nuevo);
+      await API.post("/laboratorios", nuevo);
       setShowModal(false);
       setNuevo({ descripcion: "" });
 
-      const res = await API.get("/tipoMedicamentos");
-      setTipos(res.data);
+      const res = await API.get("/laboratorios");
+      setLaboratorios(res.data);
 
       // Mostrar toast
       setShowToast(true);
       setTimeout(() => setShowToast(false), 3000);
     } catch (err) {
-      console.error("Error al registrar tipo:", err);
-      alert("❌ Error al registrar el tipo de medicamento");
+      console.error("Error al registrar laboratorio:", err);
+      alert("❌ Error al registrar el laboratorio");
     }
   };
 
   return (
     <div className="tipo-container">
-      <h2 className="titulo">Tipos de Medicamento</h2>
+      <h2 className="titulo">Laboratorios</h2>
 
       <div className="acciones">
         <input
           type="text"
-          placeholder="Buscar tipo de medicamento..."
+          placeholder="Buscar laboratorio..."
           value={filtro}
           onChange={(e) => setFiltro(e.target.value)}
           className="input-busqueda"
         />
         <button onClick={() => setShowModal(true)} className="btn-registrar">
-          ➕ Registrar Tipo
+          ➕ Registrar Laboratorio
         </button>
       </div>
 
       {/* Tarjetas */}
       <div className="tarjetas-grid">
-        {tiposFiltrados.length > 0 ? (
-          tiposFiltrados.map((t) => (
-            <div key={t.id} className="tarjeta">
-              <span className="icono">💊</span>
-              <p className="descripcion">{t.descripcion}</p>
+        {laboratoriosFiltrados.length > 0 ? (
+          laboratoriosFiltrados.map((l) => (
+            <div key={l.id} className="tarjeta">
+              <span className="icono">🏢</span>
+              <p className="descripcion">{l.descripcion}</p>
             </div>
           ))
         ) : (
-          <p className="sin-resultados">No hay tipos registrados</p>
+          <p className="sin-resultados">No hay laboratorios registrados</p>
         )}
       </div>
 
       {/* Modal */}
       {showModal && (
         <div className="modal-overlay" onClick={() => setShowModal(false)}>
-          <div
-            className="modal"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <h3 className="modal-titulo">Registrar Tipo de Medicamento</h3>
+          <div className="modal" onClick={(e) => e.stopPropagation()}>
+            <h3 className="modal-titulo">Registrar Laboratorio</h3>
             <form onSubmit={handleRegistrar}>
               <label>Descripción</label>
               <input
                 type="text"
-                placeholder="Ej: Antiinflamatorio"
+                placeholder="Ej: Pfizer"
                 value={nuevo.descripcion}
                 onChange={(e) =>
                   setNuevo({ ...nuevo, descripcion: e.target.value })
@@ -115,9 +112,9 @@ function TipoMedicamento() {
       )}
 
       {/* Toast */}
-      {showToast && <div className="toast show">Tipo registrado</div>}
+      {showToast && <div className="toast show">Laboratorio registrado</div>}
     </div>
   );
 }
 
-export default TipoMedicamento;
+export default RegistroLaboratorio;

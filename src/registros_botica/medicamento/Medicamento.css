@@ -4,7 +4,6 @@
   color: #333;
 }
 
-/* 🔹 Encabezado */
 .header {
   display: flex;
   justify-content: space-between;
@@ -13,13 +12,10 @@
 }
 
 .header h2 {
-  background: linear-gradient(90deg, #ff9966 0%, #ff5e62 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: #ff5e62;
   font-weight: bold;
 }
 
-/* 🔹 Botón principal */
 .btn-registrar {
   background: linear-gradient(90deg, #ff9966 0%, #ff5e62 100%);
   color: white;
@@ -37,13 +33,12 @@
   box-shadow: 0 6px 12px rgba(255, 94, 98, 0.4);
 }
 
-/* 🔹 Buscador */
 .filtro-input {
   width: 100%;
   padding: 10px;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
   border-radius: 6px;
-  border: 1px solid #ccc;
+  border: 1px solid #ddd;
   outline: none;
   transition: all 0.2s;
 }
@@ -53,35 +48,43 @@
   box-shadow: 0 0 6px rgba(255, 94, 98, 0.4);
 }
 
-/* 🔹 Tabla */
 .tabla {
   width: 100%;
   border-collapse: collapse;
   background-color: #fff;
   border-radius: 8px;
   overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
 .tabla th,
 .tabla td {
-  border: 1px solid #eee;
-  padding: 10px;
+  padding: 12px 15px;
   text-align: left;
+  border-bottom: 1px solid #eee;
 }
 
 .tabla th {
-  background: linear-gradient(90deg, #ff9966 0%, #ff5e62 100%);
-  color: white;
+  background-color: #ffffff;
+  color: #333;
   font-weight: bold;
+  text-transform: uppercase;
+  font-size: 0.9em;
 }
 
-.tabla tr:nth-child(even) {
-  background-color: #f9f9f9;
-}
+/* Se quita el fondo de color alterno para un look más limpio */
+/* .tabla tr:nth-child(even) {
+  background-color: #f9f9f9;
+} */
 
 .tabla tr:hover {
-  background-color: #ffe6e1;
+  background-color: #fff8f7;
 }
+
+.tabla tr:last-child td {
+  border-bottom: none;
+}
+
 
 /* 🔹 Paginación */
 .pagination {
@@ -212,7 +215,8 @@
 /* 🔹 Toast (mensaje superior derecho) */
 .toast {
   position: fixed;
-  top: 80px; /* 🔸 Ajustado para que no se solape con el menú */
+  top: 80px;
+  /* 🔸 Ajustado para que no se solape con el menú */
   right: 20px;
   background: linear-gradient(90deg, #ff9966 0%, #ff5e62 100%);
   color: white;
@@ -231,10 +235,12 @@
     opacity: 0;
     transform: translateY(-20px);
   }
+
   40% {
     opacity: 1;
     transform: translateY(0);
   }
+
   100% {
     opacity: 1;
   }
@@ -246,6 +252,7 @@
     opacity: 0;
     transform: scale(0.95);
   }
+
   to {
     opacity: 1;
     transform: scale(1);

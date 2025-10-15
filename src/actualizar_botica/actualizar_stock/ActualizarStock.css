@@ -1,0 +1,81 @@
+.stock-container {
+  padding: 2rem;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+}
+
+.stock-title {
+  color: #ff5e62;
+  margin-top: 0;
+  margin-bottom: 2rem;
+}
+
+.stock-header {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.stock-input {
+  padding: 0.8rem;
+  border: 1px solid #ced4da;
+  border-radius: 8px;
+  font-size: 1rem;
+  min-width: 300px;
+}
+
+.stock-button {
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  margin-left: 0.5rem;
+}
+
+.stock-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.stock-table th, .stock-table td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid #e9ecef;
+  vertical-align: middle;
+}
+
+.stock-table th {
+  background-color: #f8f9fa;
+}
+
+.edit-mode {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.stock-edit-input {
+  padding: 0.6rem;
+  border: 1px solid #ff9966;
+  border-radius: 6px;
+  width: 120px;
+  text-align: center;
+}
+
+.action-btn {
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+}
+
+.save-btn {
+  background-color: #28a745; 
+}
+
+.cancel-btn {
+  background-color: #6c757d; 
+}
+
