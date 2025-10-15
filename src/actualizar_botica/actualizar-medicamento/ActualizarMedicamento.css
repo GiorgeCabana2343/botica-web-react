@@ -1,0 +1,205 @@
+.actualizar-container {
+  padding: 20px;
+  font-family: "Segoe UI", sans-serif;
+  color: #333;
+}
+
+/* Encabezado */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.header h2 {
+  background: linear-gradient(90deg, #ff9966 0%, #ff5e62 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: bold;
+}
+
+.input-busqueda {
+  width: 300px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  outline: none;
+  transition: 0.2s;
+}
+
+.input-busqueda:focus {
+  border-color: #ff5e62;
+  box-shadow: 0 0 5px rgba(255, 94, 98, 0.3);
+}
+
+/* Tabla */
+.tabla {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.tabla th,
+.tabla td {
+  padding: 10px;
+  border: 1px solid #eee;
+  text-align: left;
+}
+
+.tabla th {
+  background: linear-gradient(90deg, #ff9966 0%, #ff5e62 100%);
+  color: #fff;
+  font-weight: bold;
+}
+
+.tabla tr:nth-child(even) {
+  background: #f9f9f9;
+}
+
+.tabla tr:hover {
+  background: #ffe7e4;
+}
+
+.btn-actualizar {
+  background: linear-gradient(90deg, #ff9966 0%, #ff5e62 100%);
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-actualizar:hover {
+  transform: scale(1.05);
+}
+
+/* Paginación */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 15px;
+  gap: 10px;
+}
+
+.pagination button {
+  background: linear-gradient(90deg, #ff9966 0%, #ff5e62 100%);
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.pagination button:hover {
+  transform: scale(1.05);
+}
+
+.pagination button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 50;
+}
+
+.modal {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  width: 380px;
+  animation: fadeIn 0.3s ease;
+}
+
+.modal h3 {
+  text-align: center;
+  margin-bottom: 10px;
+  background: linear-gradient(90deg, #ff9966 0%, #ff5e62 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: bold;
+}
+
+/* Inputs */
+.input-corto {
+  width: 100%;
+  padding: 6px;
+  margin-top: 5px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  outline: none;
+  transition: 0.2s;
+}
+
+.input-corto:focus {
+  border-color: #ff5e62;
+  box-shadow: 0 0 5px rgba(255, 94, 98, 0.3);
+}
+
+/* Botones modal */
+.modal-botones {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+
+.btn-guardar {
+  background: linear-gradient(90deg, #ff9966 0%, #ff5e62 100%);
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.btn-cancelar {
+  background: #999;
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn-guardar:hover {
+  transform: scale(1.05);
+}
+
+/* Toast */
+.toast {
+  position: fixed;
+  top: 80px;
+  right: 20px;
+  background: linear-gradient(90deg, #ff9966 0%, #ff5e62 100%);
+  color: white;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-weight: bold;
+  animation: fadeIn 0.3s ease;
+  z-index: 100;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

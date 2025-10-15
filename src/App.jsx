@@ -10,6 +10,7 @@ import TipoMedicamento from './registros_botica/tipo_medicamento/TipoMedicamento
 import Laboratorio from './registros_botica/laboratorio/Laboratorio.jsx';
 import './App.css';
 import ActualizarStock from './actualizar_botica/actualizar_stock/ActualizarStock.jsx';
+import ActualizarMedicamento from "../src/actualizar_botica/actualizar-medicamento/ActualizarMedicamento.jsx";
 
 function App() {
   const { user } = useAuth();
@@ -21,12 +22,13 @@ function App() {
       <Route element={<ProtectedRoute />}>
         <Route element={<MainLayout />}>
           <Route path="/" element={<Home />} />
-          <Route path="/registrar-medicamento" element={<Medicamento />}/>
-          <Route path="/registrar-tipos-medicamento" element={<TipoMedicamento />}/>
-          <Route path="/registrar-laboratorio" element={<Laboratorio />}/>
-          <Route path="/actualizar-stock" element={<ActualizarStock />}/>
+          <Route path="/registrar-medicamento" element={<Medicamento />} />
+          <Route path="/registrar-tipos-medicamento" element={<TipoMedicamento />} />
+          <Route path="/registrar-laboratorio" element={<Laboratorio />} />
+          <Route path="/actualizar-stock" element={<ActualizarStock />} />
+          <Route path="/actualizar-medicamento" element={<ActualizarMedicamento />} />
         </Route>
-        
+
 
       </Route>
       <Route path="*" element={<Navigate to="/" />} />
