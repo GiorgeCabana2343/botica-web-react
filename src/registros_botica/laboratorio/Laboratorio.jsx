@@ -49,7 +49,7 @@ function RegistroLaboratorio() {
 
   return (
     <div className="tipo-container">
-      <h2 className="titulo">Laboratorios</h2>
+      <h1 className="titulo">Laboratorios</h1>
 
       <div className="acciones">
         <input

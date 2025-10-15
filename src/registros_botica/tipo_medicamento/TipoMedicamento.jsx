@@ -49,7 +49,7 @@ function TipoMedicamento() {
 
   return (
     <div className="tipo-container">
-      <h2 className="titulo">Tipos de Medicamento</h2>
+      <h1 className="titulo">Tipos de Medicamento</h1>
 
       <div className="acciones">
         <input

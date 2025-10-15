@@ -5,10 +5,9 @@
 }
 
 .titulo {
-  font-size: 28px;
-  font-weight: 600;
-  color: #333;
-  margin-bottom: 20px;
+  color: #ff5e62; 
+  font-size: 2.1rem; 
+  font-weight: bold;
 }
 
 /* Filtros y botones superiores */

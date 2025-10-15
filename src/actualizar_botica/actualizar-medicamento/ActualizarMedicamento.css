@@ -4,7 +4,6 @@
   color: #333;
 }
 
-/* Encabezado */
 .header {
   display: flex;
   justify-content: space-between;
@@ -14,7 +13,7 @@
 
 .header h2 {
   background: linear-gradient(90deg, #ff9966 0%, #ff5e62 100%);
-  -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   font-weight: bold;
 }
@@ -33,7 +32,6 @@
   box-shadow: 0 0 5px rgba(255, 94, 98, 0.3);
 }
 
-/* Tabla */
 .tabla {
   width: 100%;
   border-collapse: collapse;
@@ -77,7 +75,6 @@
   transform: scale(1.05);
 }
 
-/* Paginación */
 .pagination {
   display: flex;
   justify-content: center;
@@ -128,12 +125,11 @@
   text-align: center;
   margin-bottom: 10px;
   background: linear-gradient(90deg, #ff9966 0%, #ff5e62 100%);
-  -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   font-weight: bold;
 }
 
-/* Inputs */
 .input-corto {
   width: 100%;
   padding: 6px;
@@ -149,7 +145,6 @@
   box-shadow: 0 0 5px rgba(255, 94, 98, 0.3);
 }
 
-/* Botones modal */
 .modal-botones {
   display: flex;
   justify-content: space-between;
@@ -179,7 +174,6 @@
   transform: scale(1.05);
 }
 
-/* Toast */
 .toast {
   position: fixed;
   top: 80px;

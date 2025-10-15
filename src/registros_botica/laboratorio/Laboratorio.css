@@ -12,10 +12,9 @@
   margin-bottom: 15px;
 }
 
-.header h2 {
-  background: linear-gradient(90deg, #ff9966 0%, #ff5e62 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+.header h1 {
+  color: #ff5e62; 
+  font-size: 2.1rem; 
   font-weight: bold;
 }
 
@@ -100,7 +99,7 @@
   text-align: center;
   font-size: 1.2rem;
   background: linear-gradient(90deg, #ff9966 0%, #ff5e62 100%);
-  -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   font-weight: bold;
 }

@@ -94,7 +94,7 @@ function RegistroMedicamento() {
       {toast && <div className="toast">{toast}</div>} {/* 🔹 TOAST */}
 
       <div className="header">
-        <h2>Lista de Medicamentos</h2>
+        <h1>Lista de Medicamentos</h1>
         <button className="btn-registrar" onClick={() => setShowModal(true)}>
           ➕ Registrar Medicamento
         </button>

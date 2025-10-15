@@ -1,6 +1,15 @@
-.registro-container {
-  padding: 20px;
+body {
+  background-color: #f7f8fc; 
   font-family: "Segoe UI", Arial, sans-serif;
+}
+
+.registro-container {
+  background-color: #ffffff;    
+  padding: 30px;                  
+  border-radius: 12px;            
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.07); 
+  margin: 40px auto;            
+  max-width: 1200px;              
   color: #333;
 }
 
@@ -8,11 +17,12 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 15px;
+  margin-bottom: 20px; 
 }
 
-.header h2 {
-  color: #ff5e62;
+.header h1 { 
+  color: #ff5e62; 
+  font-size: 2.1rem; 
   font-weight: bold;
 }
 
@@ -36,9 +46,9 @@
 .filtro-input {
   width: 100%;
   padding: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 20px; 
   border-radius: 6px;
-  border: 1px solid #ddd;
+  border: 1px solid #ddd; 
   outline: none;
   transition: all 0.2s;
 }
@@ -54,39 +64,41 @@
   background-color: #fff;
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); 
+  margin-bottom: 20px; 
 }
 
 .tabla th,
 .tabla td {
   padding: 12px 15px;
   text-align: left;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #eee; 
 }
 
 .tabla th {
-  background-color: #ffffff;
-  color: #333;
+  background-color: #ffffff; 
+  color: #333; 
   font-weight: bold;
   text-transform: uppercase;
   font-size: 0.9em;
 }
 
-/* Se quita el fondo de color alterno para un look más limpio */
-/* .tabla tr:nth-child(even) {
-  background-color: #f9f9f9;
-} */
+.tabla tbody tr:nth-child(odd) {
+  background-color: #fcfcfc; 
+}
+
+.tabla tbody tr:nth-child(even) {
+  background-color: #ffffff; 
+}
 
 .tabla tr:hover {
-  background-color: #fff8f7;
+  background-color: #fff8f7; 
 }
 
 .tabla tr:last-child td {
   border-bottom: none;
 }
 
-
-/* 🔹 Paginación */
 .pagination {
   display: flex;
   justify-content: center;
@@ -120,7 +132,6 @@
   color: #444;
 }
 
-/* 🔹 Modal */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -145,7 +156,7 @@
   text-align: center;
   font-size: 1.2rem;
   background: linear-gradient(90deg, #ff9966 0%, #ff5e62 100%);
-  -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   font-weight: bold;
 }
@@ -176,7 +187,6 @@
   box-shadow: 0 0 6px rgba(255, 94, 98, 0.3);
 }
 
-/* 🔹 Botones del modal */
 .modal-buttons {
   display: flex;
   justify-content: space-between;
@@ -212,11 +222,9 @@
   background-color: #777;
 }
 
-/* 🔹 Toast (mensaje superior derecho) */
 .toast {
   position: fixed;
   top: 80px;
-  /* 🔸 Ajustado para que no se solape con el menú */
   right: 20px;
   background: linear-gradient(90deg, #ff9966 0%, #ff5e62 100%);
   color: white;
@@ -235,24 +243,20 @@
     opacity: 0;
     transform: translateY(-20px);
   }
-
   40% {
     opacity: 1;
     transform: translateY(0);
   }
-
   100% {
     opacity: 1;
   }
 }
 
-/* 🔹 Animación Modal */
 @keyframes fadeIn {
   from {
     opacity: 0;
     transform: scale(0.95);
   }
-
   to {
     opacity: 1;
     transform: scale(1);
