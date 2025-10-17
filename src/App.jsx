@@ -11,6 +11,8 @@ import Laboratorio from './registros_botica/laboratorio/Laboratorio.jsx';
 import './App.css';
 import ActualizarStock from './actualizar_botica/actualizar_stock/ActualizarStock.jsx';
 import ActualizarMedicamento from "../src/actualizar_botica/actualizar-medicamento/ActualizarMedicamento.jsx";
+import MedicamentosPorLaboratorio from './actualizar_botica/medicamento_x_laboratorio/MedicamentosPorLaboratorio.jsx';
+import MedicamentosPorTipo from './actualizar_botica/medicamento_x_tipo/MedicamentosPorTipoMedicamento.jsx';
 
 function App() {
   const { user } = useAuth();
@@ -27,6 +29,8 @@ function App() {
           <Route path="/registrar-laboratorio" element={<Laboratorio />} />
           <Route path="/actualizar-stock" element={<ActualizarStock />} />
           <Route path="/actualizar-medicamento" element={<ActualizarMedicamento />} />
+          <Route path="/medicamento-por-laboratorio" element={<MedicamentosPorLaboratorio />} />
+          <Route path="/medicamento-por-tipo" element={<MedicamentosPorTipo />} />
         </Route>
 
 
