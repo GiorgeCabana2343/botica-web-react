@@ -512,7 +512,7 @@ body {
   display: grid;
   grid-template-columns: 60% 40%;
   align-items: center;
-  background-color: #000;
+  background: linear-gradient(90deg, #dfdfdf 0%, #323232 100%);
 }
 
 .promo-image-container {
