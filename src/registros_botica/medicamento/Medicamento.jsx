@@ -1,82 +1,95 @@
 import { useState, useEffect } from "react";
 import API from "../../backend/conexion.js";
-import "./Medicamento.css"
-
+import "./Medicamento.css";
 
 function RegistroMedicamento() {
   const [medicamentos, setMedicamentos] = useState([]);
   const [tipos, setTipos] = useState([]);
   const [laboratorios, setLaboratorios] = useState([]);
   const [showModal, setShowModal] = useState(false);
+
   const [form, setForm] = useState({
     nombre: "",
     precio: "",
     stock: "",
     idTipoMedicamento: "",
     idLaboratorio: "",
+    status: true,
   });
 
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 15;
+  const [toast, setToast] = useState("");
 
-  const [toast, setToast] = useState(""); // mensaje toast
+  const fetchData = async () => {
+    try {
+      const [medRes, tiposRes, labsRes] = await Promise.all([
+        API.get("/medicamentos"),
+        API.get("/tipoMedicamentos"),
+        API.get("/laboratorios"),
+      ]);
+      setMedicamentos(medRes.data);
+      setTipos(tiposRes.data);
+      setLaboratorios(labsRes.data);
+    } catch (err) {
+      console.error("Error al cargar datos:", err);
+    }
+  };
 
-  // 🔹 Cargar datos
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [medRes, tiposRes, labsRes] = await Promise.all([
-          API.get("/medicamentos"),
-          API.get("/tipoMedicamentos"),
-          API.get("/laboratorios"),
-        ]);
-        setMedicamentos(medRes.data);
-        setTipos(tiposRes.data);
-        setLaboratorios(labsRes.data);
-      } catch (err) {
-        console.error(err);
-      }
-    };
     fetchData();
   }, []);
 
-  // 🔹 Manejo de inputs
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+  const handleStatusChange = async (id, currentStatus) => {
+    const newStatus = currentStatus === 1 ? 0 : 1;
+    try {
+      await API.patch(`/medicamentos/status/${id}`, { status: newStatus });
+      setMedicamentos(medicamentos.map(med =>
+        med.id === id ? { ...med, status: newStatus } : med
+      ));
+      setToast("✅ Estado actualizado");
+      setTimeout(() => setToast(""), 3000);
+    } catch (err) {
+      console.error("Error al actualizar estado:", err);
+      setToast("❌ Error al cambiar el estado");
+    }
   };
 
-  // 🔹 Registro medicamento
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setForm(prevForm => ({
+      ...prevForm,
+      [name]: type === 'checkbox' ? checked : value
+    }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await API.post("/medicamentos", form);
-
-      // Actualizar lista
-      const res = await API.get("/medicamentos");
-      setMedicamentos(res.data);
-
-      // Reset y cerrar modal
+      const payload = {
+        ...form,
+        status: form.status ? 1 : 0
+      };
+      await API.post("/medicamentos", payload);
+      fetchData();
       setForm({
         nombre: "",
         precio: "",
         stock: "",
         idTipoMedicamento: "",
         idLaboratorio: "",
+        status: true,
       });
       setShowModal(false);
-
-      // Mostrar toast
       setToast("✅ Medicamento registrado");
-      setTimeout(() => setToast(""), 3000); // desaparece en 3s
+      setTimeout(() => setToast(""), 3000);
     } catch (err) {
       console.error(err);
       setToast("❌ Error al registrar medicamento");
-      setTimeout(() => setToast(""), 3000);
     }
   };
 
-  // 🔹 Filtro y paginación
   const filtered = medicamentos.filter((m) =>
     m.nombre.toLowerCase().includes(search.toLowerCase())
   );
@@ -91,15 +104,13 @@ function RegistroMedicamento() {
 
   return (
     <div className="registro-container">
-      {toast && <div className="toast">{toast}</div>} {/* 🔹 TOAST */}
-
+      {toast && <div className="toast">{toast}</div>}
       <div className="header">
         <h1>Lista de Medicamentos</h1>
         <button className="btn-registrar" onClick={() => setShowModal(true)}>
           ➕ Registrar Medicamento
         </button>
       </div>
-
       <input
         type="text"
         placeholder="Buscar por nombre..."
@@ -110,7 +121,6 @@ function RegistroMedicamento() {
           setCurrentPage(1);
         }}
       />
-
       <table className="tabla">
         <thead>
           <tr>
@@ -120,6 +130,7 @@ function RegistroMedicamento() {
             <th>Stock</th>
             <th>Tipo</th>
             <th>Laboratorio</th>
+            <th>Acciones</th>
           </tr>
         </thead>
         <tbody>
@@ -127,29 +138,29 @@ function RegistroMedicamento() {
             <tr key={m.id}>
               <td>{m.id}</td>
               <td>{m.nombre}</td>
-              <td>{m.precio}</td>
+              <td>S/ {Number(m.precio).toFixed(2)}</td>
               <td>{m.stock}</td>
               <td>{m.tipoMedicamento}</td>
               <td>{m.laboratorio}</td>
+              <td>
+                <label className="switch">
+                  <input
+                    type="checkbox"
+                    checked={m.status === 1}
+                    onChange={() => handleStatusChange(m.id, m.status)}
+                  />
+                  <span className="slider"></span>
+                </label>
+              </td>
             </tr>
           ))}
         </tbody>
       </table>
-
-      {/* 🔹 Paginación */}
       <div className="pagination">
-        <button onClick={() => goToPage(currentPage - 1)} disabled={currentPage === 1}>
-          ◀
-        </button>
-        <span>
-          Página {currentPage} de {totalPages}
-        </span>
-        <button onClick={() => goToPage(currentPage + 1)} disabled={currentPage === totalPages}>
-          ▶
-        </button>
+        <button onClick={() => goToPage(currentPage - 1)} disabled={currentPage === 1}>◀</button>
+        <span>Página {currentPage} de {totalPages}</span>
+        <button onClick={() => goToPage(currentPage + 1)} disabled={currentPage === totalPages}>▶</button>
       </div>
-
-      {/* 🔹 Modal */}
       {showModal && (
         <div className="modal-overlay" onClick={() => setShowModal(false)}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
@@ -157,67 +168,36 @@ function RegistroMedicamento() {
             <form onSubmit={handleSubmit}>
               <label>Nombre:</label>
               <input name="nombre" value={form.nombre} onChange={handleChange} required />
-
               <label>Precio:</label>
-              <input
-                name="precio"
-                type="number"
-                step="0.01"
-                value={form.precio}
-                onChange={handleChange}
-                required
-              />
-
+              <input name="precio" type="number" step="0.01" value={form.precio} onChange={handleChange} required />
               <label>Stock:</label>
-              <input
-                name="stock"
-                type="number"
-                value={form.stock}
-                onChange={handleChange}
-                required
-              />
-
+              <input name="stock" type="number" value={form.stock} onChange={handleChange} required />
               <label>Tipo de Medicamento:</label>
-              <select
-                name="idTipoMedicamento"
-                value={form.idTipoMedicamento}
-                onChange={handleChange}
-                required
-              >
+              <select name="idTipoMedicamento" value={form.idTipoMedicamento} onChange={handleChange} required>
                 <option value="">Seleccione...</option>
-                {tipos.map((t) => (
-                  <option key={t.id} value={t.id}>
-                    {t.descripcion}
-                  </option>
-                ))}
+                {tipos.map((t) => (<option key={t.id} value={t.id}>{t.descripcion}</option>))}
               </select>
-
               <label>Laboratorio:</label>
-              <select
-                name="idLaboratorio"
-                value={form.idLaboratorio}
-                onChange={handleChange}
-                required
-              >
+              <select name="idLaboratorio" value={form.idLaboratorio} onChange={handleChange} required>
                 <option value="">Seleccione...</option>
-                {laboratorios.map((l) => (
-                  <option key={l.id} value={l.id}>
-                    {l.descripcion}
-                  </option>
-                ))}
+                {laboratorios.map((l) => (<option key={l.id} value={l.id}>{l.descripcion}</option>))}
               </select>
+              <div className="form-group-switch">
+                <label>Activo:</label>
+                <label className="switch">
+                  <input
+                    name="status"
+                    type="checkbox"
+                    checked={form.status}
+                    onChange={handleChange}
+                  />
+                  <span className="slider"></span>
+                </label>
+              </div>
 
               <div className="modal-buttons">
-                <button type="submit" className="btn-guardar">
-                  Guardar
-                </button>
-                <button
-                  type="button"
-                  className="btn-cancelar"
-                  onClick={() => setShowModal(false)}
-                >
-                  Cancelar
-                </button>
+                <button type="submit" className="btn-guardar">Guardar</button>
+                <button type="button" className="btn-cancelar" onClick={() => setShowModal(false)}>Cancelar</button>
               </div>
             </form>
           </div>

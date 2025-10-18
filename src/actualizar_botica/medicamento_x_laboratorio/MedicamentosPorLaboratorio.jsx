@@ -43,7 +43,7 @@ function MedicamentosPorLaboratorio() {
     };
 
     fetchMedicamentosPorLaboratorio();
-  }, [selectedLabId]); // Se ejecuta cada vez que selectedLabId cambia
+  }, [selectedLabId]); 
 
   return (
     <div className="reporte-container">

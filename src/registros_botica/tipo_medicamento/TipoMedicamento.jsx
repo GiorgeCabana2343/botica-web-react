@@ -6,39 +6,58 @@ function TipoMedicamento() {
   const [tipos, setTipos] = useState([]);
   const [filtro, setFiltro] = useState("");
   const [showModal, setShowModal] = useState(false);
-  const [nuevo, setNuevo] = useState({ descripcion: "" });
+  const [nuevo, setNuevo] = useState({ descripcion: "", status: true });
   const [showToast, setShowToast] = useState(false);
 
-  // Cargar tipos de medicamento
+  const fetchTipos = async () => {
+    try {
+      const res = await API.get("/tipoMedicamentos");
+      setTipos(res.data);
+    } catch (err) {
+      console.error("Error al cargar tipos:", err);
+    }
+  };
+
   useEffect(() => {
-    const fetchTipos = async () => {
-      try {
-        const res = await API.get("/tipoMedicamentos");
-        setTipos(res.data);
-      } catch (err) {
-        console.error("Error al cargar tipos:", err);
-      }
-    };
     fetchTipos();
   }, []);
 
-  // Filtro en tiempo real
+  const handleStatusChange = async (id, currentStatus) => {
+    const newStatus = currentStatus === 1 ? 0 : 1;
+    try {
+      await API.patch(`/tipoMedicamentos/status/${id}`, { status: newStatus });
+      setTipos(tipos.map(t =>
+        t.id === id ? { ...t, status: newStatus } : t
+      ));
+    } catch (err) {
+      console.error("Error al actualizar el estado:", err);
+      alert("❌ Error al cambiar el estado");
+    }
+  };
+
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setNuevo(prev => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value
+    }));
+  };
+
   const tiposFiltrados = tipos.filter((t) =>
     t.descripcion.toLowerCase().includes(filtro.toLowerCase())
   );
 
-  // Registrar nuevo tipo
   const handleRegistrar = async (e) => {
     e.preventDefault();
     try {
-      await API.post("/tipoMedicamentos", nuevo);
+      const payload = {
+        descripcion: nuevo.descripcion,
+        status: nuevo.status ? 1 : 0
+      };
+      await API.post("/tipoMedicamentos", payload);
       setShowModal(false);
-      setNuevo({ descripcion: "" });
-
-      const res = await API.get("/tipoMedicamentos");
-      setTipos(res.data);
-
-      // Mostrar toast
+      setNuevo({ descripcion: "", status: true });
+      fetchTipos();
       setShowToast(true);
       setTimeout(() => setShowToast(false), 3000);
     } catch (err) {
@@ -64,13 +83,22 @@ function TipoMedicamento() {
         </button>
       </div>
 
-      {/* Tarjetas */}
       <div className="tarjetas-grid">
         {tiposFiltrados.length > 0 ? (
           tiposFiltrados.map((t) => (
             <div key={t.id} className="tarjeta">
-              <span className="icono">💊</span>
-              <p className="descripcion">{t.descripcion}</p>
+              <div className="tarjeta-info">
+                <span className="icono">💊</span>
+                <p className="descripcion">{t.descripcion}</p>
+              </div>
+              <label className="switch">
+                <input
+                  type="checkbox"
+                  checked={t.status === 1}
+                  onChange={() => handleStatusChange(t.id, t.status)}
+                />
+                <span className="slider"></span>
+              </label>
             </div>
           ))
         ) : (
@@ -78,25 +106,34 @@ function TipoMedicamento() {
         )}
       </div>
 
-      {/* Modal */}
       {showModal && (
         <div className="modal-overlay" onClick={() => setShowModal(false)}>
-          <div
-            className="modal"
-            onClick={(e) => e.stopPropagation()}
-          >
+          <div className="modal" onClick={(e) => e.stopPropagation()}>
             <h3 className="modal-titulo">Registrar Tipo de Medicamento</h3>
             <form onSubmit={handleRegistrar}>
               <label>Descripción</label>
               <input
                 type="text"
+                name="descripcion" 
                 placeholder="Ej: Antiinflamatorio"
                 value={nuevo.descripcion}
-                onChange={(e) =>
-                  setNuevo({ ...nuevo, descripcion: e.target.value })
-                }
+                onChange={handleChange}
                 required
               />
+
+              <div className="form-group-switch">
+                <label>Activo:</label>
+                <label className="switch">
+                  <input
+                    name="status"
+                    type="checkbox"
+                    checked={nuevo.status}
+                    onChange={handleChange}
+                  />
+                  <span className="slider"></span>
+                </label>
+              </div>
+
               <div className="modal-botones">
                 <button
                   type="button"
@@ -113,9 +150,7 @@ function TipoMedicamento() {
           </div>
         </div>
       )}
-
-      {/* Toast */}
-      {showToast && <div className="toast show">Tipo registrado</div>}
+      {showToast && <div className="toast show">✅ Tipo registrado</div>}
     </div>
   );
 }

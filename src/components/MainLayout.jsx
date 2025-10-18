@@ -72,7 +72,6 @@ function MainLayout() {
       </header>
 
       <main className="container">
-        {/* Aquí se renderizarán las páginas correspondientes a las rutas */}
         <Outlet />
       </main>
     </>

@@ -166,7 +166,6 @@ function ActualizarStock() {
               <p>Stock actual: <strong>{selectedMedicamento.stock}</strong></p>
               
               <div className="modal-form-group">
-                {/* ✅ CAMBIO: Se ajusta el texto para mayor claridad */}
                 <label>Cantidad a agregar:</label>
                 <input
                   type="number"
@@ -174,7 +173,7 @@ function ActualizarStock() {
                   value={stockChange}
                   onChange={(e) => setStockChange(e.target.value)}
                   placeholder="Ej: 50"
-                  min="1" // El navegador intentará prevenir números negativos
+                  min="1" 
                 />
               </div>
 

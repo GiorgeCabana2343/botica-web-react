@@ -1,16 +1,14 @@
-/* Contenedor principal */
 .tipo-container {
   padding: 30px;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .titulo {
-  color: #ff5e62; 
-  font-size: 2.1rem; 
+  color: #ff5e62;
+  font-size: 2.1rem;
   font-weight: bold;
 }
 
-/* Filtros y botones superiores */
 .acciones {
   display: flex;
   justify-content: space-between;
@@ -46,10 +44,9 @@
   opacity: 0.9;
 }
 
-/* Tarjetas */
 .tarjetas-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 20px;
 }
 
@@ -57,9 +54,11 @@
   background: #fff;
   border-radius: 12px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  padding: 25px;
-  text-align: center;
+  padding: 20px;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .tarjeta:hover {
@@ -67,13 +66,20 @@
   box-shadow: 0 8px 20px rgba(255, 94, 98, 0.25);
 }
 
+.tarjeta-info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  text-align: left;
+}
+
 .icono {
-  font-size: 30px;
+  font-size: 24px;
 }
 
 .descripcion {
-  margin-top: 10px;
-  font-size: 18px;
+  margin: 0;
+  font-size: 1rem;
   font-weight: 500;
   color: #444;
 }
@@ -85,7 +91,51 @@
   font-style: italic;
 }
 
-/* Modal */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: .4s;
+  border-radius: 24px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+input:checked+.slider {
+  background-color: #4CAF50;
+}
+
+input:checked+.slider:before {
+  transform: translateX(20px);
+}
+
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -117,7 +167,13 @@
 .modal form {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+}
+
+.modal label {
+  font-weight: 600;
+  color: #333;
+  margin-top: 15px;
+  margin-bottom: 5px;
 }
 
 .modal input {
@@ -132,41 +188,49 @@
   box-shadow: 0 0 6px rgba(255, 94, 98, 0.5);
 }
 
+.form-group-switch {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  padding: 10px 15px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  border: 1px solid #eee;
+}
+
+.form-group-switch label {
+  margin: 0;
+}
+
 .modal-botones {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
-  margin-top: 15px;
+  margin-top: 25px;
 }
 
-.btn-cancelar {
-  background: #ddd;
-  color: #333;
-  padding: 8px 16px;
+.btn-cancelar,
+.btn-guardar {
+  padding: 10px 20px;
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  font-weight: 500;
+  font-weight: 600;
+  color: white;
+}
+
+.btn-cancelar {
+  background: #6c757d;
 }
 
 .btn-guardar {
   background: linear-gradient(90deg, #ff9966 0%, #ff5e62 100%);
-  color: #fff;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
 }
 
-.btn-guardar:hover {
-  opacity: 0.9;
-}
-
-/* Toast */
 .toast {
   position: fixed;
-  top: 90px; /* más abajo del menú */
+  top: 90px;
   right: 30px;
   background: linear-gradient(90deg, #ff9966 0%, #ff5e62 100%);
   color: #fff;
@@ -190,6 +254,7 @@
     opacity: 0;
     transform: scale(0.95);
   }
+
   to {
     opacity: 1;
     transform: scale(1);
