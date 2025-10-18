@@ -131,7 +131,7 @@ function Home() {
         <div className="hero-content">
           <h1 className="hero-title">Tu Salud, Nuestra Prioridad</h1>
           <p className="hero-description">
-            En MIFARMA, nos dedicamos a ofrecerte los mejores productos y el asesoramiento farmacéutico
+            En Mifarma, nos dedicamos a ofrecerte los mejores productos y el asesoramiento farmacéutico
             que necesitas para cuidar de ti y tu familia. Calidad y confianza en cada compra.
           </p>
           <a href="/medicamentos" className="hero-button">Ver Productos</a>
