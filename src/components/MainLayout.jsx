@@ -1,7 +1,7 @@
 import { Link, Outlet, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.jsx';
 import Dropdown from './Dropdown.jsx';
-import mi_logo from '../assets/mi_logo.png';
+import Mifarma from '../assets/MiFarma-logo.png';
 
 
 const mantenimientoItems = [
@@ -34,7 +34,7 @@ function MainLayout() {
       <header className="navbar modern">
         <Link to="/" className="navbar-brand">
           <img
-            src={mi_logo}
+            src={Mifarma}
             alt="MIFARMA Logo"
             className="navbar-logo"
           />
