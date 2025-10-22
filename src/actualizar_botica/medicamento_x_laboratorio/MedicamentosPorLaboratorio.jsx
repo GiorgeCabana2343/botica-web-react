@@ -12,7 +12,7 @@ function MedicamentosPorLaboratorio() {
   useEffect(() => {
     const fetchLaboratorios = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/laboratorios');
+        const response = await axios.get('http://localhost:3000/api/laboratorios/activos');
         setLaboratorios(response.data);
       } catch (err) {
         console.error("Error al cargar laboratorios:", err);

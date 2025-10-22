@@ -26,11 +26,11 @@ function RegistroMedicamento() {
     try {
       const [medRes, tiposRes, labsRes] = await Promise.all([
         API.get("/medicamentos"),
-        API.get("/tipoMedicamentos"),
-        API.get("/laboratorios"),
+        API.get("/tipoMedicamentos/activos"),
+        API.get("/laboratorios/activos"),
       ]);
       setMedicamentos(medRes.data);
-      setTipos(tiposRes.data);
+      setTipos(tiposRes.data);     
       setLaboratorios(labsRes.data);
     } catch (err) {
       console.error("Error al cargar datos:", err);
@@ -49,7 +49,7 @@ function RegistroMedicamento() {
         med.id === id ? { ...med, status: newStatus } : med
       ));
       setToast("✅ Estado actualizado");
-      setTimeout(() => setToast(""), 3000);
+      setTimeout(() => setToast(""), 5000);
     } catch (err) {
       console.error("Error al actualizar estado:", err);
       setToast("❌ Error al cambiar el estado");
@@ -182,19 +182,6 @@ function RegistroMedicamento() {
                 <option value="">Seleccione...</option>
                 {laboratorios.map((l) => (<option key={l.id} value={l.id}>{l.descripcion}</option>))}
               </select>
-              <div className="form-group-switch">
-                <label>Activo:</label>
-                <label className="switch">
-                  <input
-                    name="status"
-                    type="checkbox"
-                    checked={form.status}
-                    onChange={handleChange}
-                  />
-                  <span className="slider"></span>
-                </label>
-              </div>
-
               <div className="modal-buttons">
                 <button type="submit" className="btn-guardar">Guardar</button>
                 <button type="button" className="btn-cancelar" onClick={() => setShowModal(false)}>Cancelar</button>

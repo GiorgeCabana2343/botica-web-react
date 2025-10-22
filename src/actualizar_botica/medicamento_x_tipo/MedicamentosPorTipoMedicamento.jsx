@@ -12,7 +12,7 @@ function MedicamentosPorTipo() {
     useEffect(() => {
         const fetchTipos = async () => {
             try {
-                const response = await axios.get('http://localhost:3000/api/tipoMedicamentos');
+                const response = await axios.get('http://localhost:3000/api/tipoMedicamentos/activos');
                 setTipos(response.data);
             } catch (err) {
                 console.error("Error al cargar los tipos de medicamento:", err);

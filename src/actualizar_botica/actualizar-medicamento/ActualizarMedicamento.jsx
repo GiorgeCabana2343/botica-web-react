@@ -24,9 +24,9 @@ function ActualizarMedicamento() {
     const fetchData = async () => {
       try {
         const [meds, tiposRes, labsRes] = await Promise.all([
-          API.get("/medicamentos"),
-          API.get("/tipoMedicamentos"),
-          API.get("/laboratorios"),
+          API.get("/medicamentos/activos"),
+          API.get("/tipoMedicamentos/activos"),
+          API.get("/laboratorios/activos"),
         ]);
         setMedicamentos(meds.data);
         setTipos(tiposRes.data);
@@ -73,7 +73,7 @@ function ActualizarMedicamento() {
     e.preventDefault();
     try {
       await API.put(`/medicamentos/${selectedMedicamento.id}`, form);
-      const res = await API.get("/medicamentos");
+      const res = await API.get("/medicamentos/activos");
       setMedicamentos(res.data);
       setShowModal(false);
       setShowToast(true);

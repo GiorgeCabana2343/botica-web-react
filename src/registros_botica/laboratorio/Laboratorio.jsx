@@ -119,20 +119,6 @@ function RegistroLaboratorio() {
                 onChange={handleChange}
                 required
               />
-
-              <div className="form-group-switch">
-                <label>Activo:</label>
-                <label className="switch">
-                  <input
-                    name="status"
-                    type="checkbox"
-                    checked={nuevo.status}
-                    onChange={handleChange}
-                  />
-                  <span className="slider"></span>
-                </label>
-              </div>
-
               <div className="modal-botones">
                 <button
                   type="button"
