@@ -4,6 +4,8 @@ interface User {
   id: number;
   nombre: string;
   email: string;
+  idSucursal: number;
+  nombreSucursal: string;
 }
 
 interface AuthContextType {

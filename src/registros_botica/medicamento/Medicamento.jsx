@@ -1,8 +1,13 @@
 import { useState, useEffect } from "react";
 import API from "../../backend/conexion.js";
 import "./Medicamento.css";
+import { useAuth } from "../../context/AuthContext.js";
+
 
 function RegistroMedicamento() {
+  const user = JSON.parse(localStorage.getItem("user"));
+  const idSucursal = user?.idSucursal;
+  //const { user } = useAuth();
   const [medicamentos, setMedicamentos] = useState([]);
   const [tipos, setTipos] = useState([]);
   const [laboratorios, setLaboratorios] = useState([]);
@@ -22,15 +27,23 @@ function RegistroMedicamento() {
   const itemsPerPage = 15;
   const [toast, setToast] = useState("");
 
+  useEffect(() => {
+    if (user?.idSucursal) {
+      fetchData(user.idSucursal);
+    }
+  }, [user]);
+
   const fetchData = async () => {
+    if (!user?.idSucursal) return;
     try {
       const [medRes, tiposRes, labsRes] = await Promise.all([
-        API.get("/medicamentos"),
+        API.get(`/medicamentos/stock/${idSucursal}`),
         API.get("/tipoMedicamentos/activos"),
         API.get("/laboratorios/activos"),
       ]);
+
       setMedicamentos(medRes.data);
-      setTipos(tiposRes.data);     
+      setTipos(tiposRes.data);
       setLaboratorios(labsRes.data);
     } catch (err) {
       console.error("Error al cargar datos:", err);
@@ -63,15 +76,53 @@ function RegistroMedicamento() {
       [name]: type === 'checkbox' ? checked : value
     }));
   };
-
+  /*
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+      try {
+        const payload = {
+          ...form,
+          status: form.status ? 1 : 0
+        };
+        await API.post("/medicamentos", payload);
+        fetchData();
+        setForm({
+          nombre: "",
+          precio: "",
+          stock: "",
+          idTipoMedicamento: "",
+          idLaboratorio: "",
+          status: true,
+        });
+        setShowModal(false);
+        setToast("✅ Medicamento registrado");
+        setTimeout(() => setToast(""), 3000);
+      } catch (err) {
+        console.error(err);
+        setToast("❌ Error al registrar medicamento");
+      }
+    };*/
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!user?.idSucursal) {
+      setToast("⚠️ No se ha detectado la sucursal del usuario");
+      return;
+    }
+
     try {
       const payload = {
-        ...form,
-        status: form.status ? 1 : 0
+        nombre: form.nombre,
+        precio: form.precio,
+        idTipoMedicamento: form.idTipoMedicamento,
+        idLaboratorio: form.idLaboratorio,
+        stock: form.stock,
+        idSucursal: user.idSucursal,
+        status: form.status ? 1 : 0,
       };
+
       await API.post("/medicamentos", payload);
+
       fetchData();
       setForm({
         nombre: "",
@@ -82,11 +133,11 @@ function RegistroMedicamento() {
         status: true,
       });
       setShowModal(false);
-      setToast("✅ Medicamento registrado");
+      setToast("✅ Medicamento registrado correctamente");
       setTimeout(() => setToast(""), 3000);
     } catch (err) {
-      console.error(err);
-      setToast("❌ Error al registrar medicamento");
+      console.error("❌ Error al registrar medicamento:", err);
+      setToast("❌ No se pudo registrar el medicamento");
     }
   };
 

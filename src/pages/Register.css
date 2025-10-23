@@ -1,0 +1,39 @@
+.select-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.styled-select {
+  width: 100%;
+  padding: 10px 40px 10px 14px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background: linear-gradient(135deg, #ffffff, #f9f9f9);
+  color: #333;
+  font-size: 15px;
+  transition: all 0.2s ease;
+  appearance: none; /* elimina el icono nativo del select */
+  outline: none;
+  cursor: pointer;
+}
+
+.styled-select:hover {
+  border-color: #4caf50;
+  background: linear-gradient(135deg, #f8fff8, #eefcee);
+}
+
+.styled-select:focus {
+  border-color: #2e7d32;
+  box-shadow: 0 0 5px rgba(46, 125, 50, 0.3);
+}
+
+/* 🔽 Flecha personalizada del select */
+.select-arrow {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #4caf50;
+  font-size: 13px;
+}

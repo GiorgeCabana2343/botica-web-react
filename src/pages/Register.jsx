@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
+import "./Register.css"
 
 const EyeIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
@@ -15,11 +16,25 @@ function Register() {
     nombre: '',
     email: '',
     password: '',
+    idSucursal: ''
   });
+  const [sucursales, setSucursales] = useState([]);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-  const [showPassword, setShowPassword] = useState(false); 
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchSucursales = async () => {
+      try {
+        const res = await axios.get('http://localhost:3000/api/sucursales');
+        setSucursales(res.data);
+      } catch (err) {
+        console.error('Error al cargar sucursales:', err);
+      }
+    };
+    fetchSucursales();
+  }, []);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -32,9 +47,9 @@ function Register() {
 
     try {
       const response = await axios.post('http://localhost:3000/api/usuarios/register', formData);
-      
+
       setSuccess(response.data.message + " Redirigiendo al login...");
-      
+
       setTimeout(() => {
         navigate('/login');
       }, 2000);
@@ -54,23 +69,23 @@ function Register() {
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label>Nombre Completo:</label>
-            <input 
-              type="text" 
-              name="nombre" 
-              value={formData.nombre} 
-              onChange={handleChange} 
-              required 
+            <input
+              type="text"
+              name="nombre"
+              value={formData.nombre}
+              onChange={handleChange}
+              required
               placeholder="Ej: Juan Pérez"
             />
           </div>
           <div className="form-group">
             <label>Email:</label>
-            <input 
-              type="email" 
-              name="email" 
-              value={formData.email} 
-              onChange={handleChange} 
-              required 
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              required
               placeholder="tu.correo@ejemplo.com"
             />
           </div>
@@ -78,20 +93,40 @@ function Register() {
             <label>Contraseña:</label>
             <div className="password-wrapper">
               <input
-                type={showPassword ? 'text' : 'password'} 
+                type={showPassword ? 'text' : 'password'}
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
                 required
                 placeholder="Mínimo 6 caracteres"
               />
-              <button 
-                type="button" 
-                onClick={() => setShowPassword(!showPassword)} 
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
                 className="password-toggle-btn"
               >
                 {showPassword ? <EyeOffIcon /> : <EyeIcon />}
               </button>
+            </div>
+          </div>
+          <div className="form-group">
+            <label>Sucursal:</label>
+            <div className="select-wrapper">
+              <select
+                name="idSucursal"
+                value={formData.idSucursal}
+                onChange={handleChange}
+                required
+                className="styled-select"
+              >
+                <option value="">Seleccione una sucursal</option>
+                {sucursales.map((sucursal) => (
+                  <option key={sucursal.id} value={sucursal.id}>
+                    {sucursal.nombre}
+                  </option>
+                ))}
+              </select>
+              <span className="select-arrow">▼</span>
             </div>
           </div>
 
