@@ -46,7 +46,7 @@ function MainLayout() {
           </Link>
           <Dropdown title="Negocios" items={mantenimientoItems} />
           <Dropdown title="Inventario" items={inventarioItems} />
-          <Link to="/" className="nav-item">
+          <Link to="/ventas" className="nav-item">
             Ventas
           </Link>
           <Link to="/" className="nav-item">
