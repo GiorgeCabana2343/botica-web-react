@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import API from "../../backend/conexion.js";
 import "./Medicamento.css";
-import { useAuth } from "../../context/AuthContext.js";
+// import { useAuth } from "../../context/AuthContext.js"; // Comentado en tu código original
 
 
 function RegistroMedicamento() {
@@ -27,14 +27,8 @@ function RegistroMedicamento() {
   const itemsPerPage = 15;
   const [toast, setToast] = useState("");
 
-  useEffect(() => {
-    if (user?.idSucursal) {
-      fetchData(user.idSucursal);
-    }
-  }, [user]);
-
   const fetchData = async () => {
-    if (!user?.idSucursal) return;
+    if (!idSucursal) return; 
     try {
       const [medRes, tiposRes, labsRes] = await Promise.all([
         API.get(`/medicamentos/stock/${idSucursal}`),
@@ -51,8 +45,11 @@ function RegistroMedicamento() {
   };
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    if (idSucursal) {
+      fetchData();
+    }
+  }, [idSucursal]); 
+
 
   const handleStatusChange = async (id, currentStatus) => {
     const newStatus = currentStatus === 1 ? 0 : 1;
@@ -76,32 +73,7 @@ function RegistroMedicamento() {
       [name]: type === 'checkbox' ? checked : value
     }));
   };
-  /*
-    const handleSubmit = async (e) => {
-      e.preventDefault();
-      try {
-        const payload = {
-          ...form,
-          status: form.status ? 1 : 0
-        };
-        await API.post("/medicamentos", payload);
-        fetchData();
-        setForm({
-          nombre: "",
-          precio: "",
-          stock: "",
-          idTipoMedicamento: "",
-          idLaboratorio: "",
-          status: true,
-        });
-        setShowModal(false);
-        setToast("✅ Medicamento registrado");
-        setTimeout(() => setToast(""), 3000);
-      } catch (err) {
-        console.error(err);
-        setToast("❌ Error al registrar medicamento");
-      }
-    };*/
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -197,7 +169,7 @@ function RegistroMedicamento() {
                 <label className="switch">
                   <input
                     type="checkbox"
-                    checked={m.status === 1}
+                    checked={m.status === 1} 
                     onChange={() => handleStatusChange(m.id, m.status)}
                   />
                   <span className="slider"></span>

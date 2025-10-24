@@ -1,8 +1,11 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import API from '../../backend/conexion.js'; 
 import './MedicamentosPorLaboratorio.css';
 
 function MedicamentosPorLaboratorio() {
+  const user = JSON.parse(localStorage.getItem("user"));
+  const idSucursal = user?.idSucursal;
+
   const [laboratorios, setLaboratorios] = useState([]);
   const [medicamentos, setMedicamentos] = useState([]);
   const [selectedLabId, setSelectedLabId] = useState('');
@@ -12,7 +15,7 @@ function MedicamentosPorLaboratorio() {
   useEffect(() => {
     const fetchLaboratorios = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/laboratorios/activos');
+        const response = await API.get('/laboratorios/activos'); 
         setLaboratorios(response.data);
       } catch (err) {
         console.error("Error al cargar laboratorios:", err);
@@ -23,7 +26,7 @@ function MedicamentosPorLaboratorio() {
   }, []);
 
   useEffect(() => {
-    if (!selectedLabId) {
+    if (!selectedLabId || !idSucursal) {
       setMedicamentos([]); 
       return;
     }
@@ -32,7 +35,10 @@ function MedicamentosPorLaboratorio() {
       setLoading(true);
       setError('');
       try {
-        const response = await axios.get(`http://localhost:3000/api/medicamentos/laboratorio/${selectedLabId}`);
+        const response = await API.get(
+          `/medicamentos/laboratorio/${selectedLabId}?sucursal=${idSucursal}`
+        );
+        
         setMedicamentos(response.data);
       } catch (err) {
         console.error("Error al cargar medicamentos por laboratorio:", err);
@@ -43,7 +49,7 @@ function MedicamentosPorLaboratorio() {
     };
 
     fetchMedicamentosPorLaboratorio();
-  }, [selectedLabId]); 
+  }, [selectedLabId, idSucursal]);
 
   return (
     <div className="reporte-container">
@@ -66,6 +72,7 @@ function MedicamentosPorLaboratorio() {
         </select>
       </div>
 
+      {!idSucursal && <p className="error-message">No se pudo detectar la sucursal del usuario.</p>}
       {error && <p className="error-message">{error}</p>}
 
       <table className="reporte-table">
@@ -82,7 +89,7 @@ function MedicamentosPorLaboratorio() {
         <tbody>
           {loading ? (
             <tr>
-              <td colSpan="5" className="status-message">Cargando...</td>
+              <td colSpan="6" className="status-message">Cargando...</td>
             </tr>
           ) : medicamentos.length > 0 ? (
             medicamentos.map((med) => (
@@ -97,7 +104,7 @@ function MedicamentosPorLaboratorio() {
             ))
           ) : (
             <tr>
-              <td colSpan="5" className="status-message">
+              <td colSpan="6" className="status-message">
                 {selectedLabId ? "No se encontraron medicamentos para este laboratorio." : "Seleccione un laboratorio para ver los resultados."}
               </td>
             </tr>

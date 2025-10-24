@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import API from '../../backend/conexion.js'; 
 import "./ActualizarStock.css";
 
 function Modal({ isOpen, onClose, children }) {
@@ -15,6 +15,8 @@ function Modal({ isOpen, onClose, children }) {
 }
 
 function ActualizarStock() {
+  const user = JSON.parse(localStorage.getItem("user"));
+  const idSucursal = user?.idSucursal;
   const [medicamentos, setMedicamentos] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(true);
@@ -25,13 +27,18 @@ function ActualizarStock() {
   const [selectedMedicamento, setSelectedMedicamento] = useState(null);
   const [stockChange, setStockChange] = useState('');
 
-  const fetchMedicamentos = async (query = '') => {
+  const fetchMedicamentos = async () => {
+    if (!idSucursal) {
+      setLoading(false);
+      setError("No se pudo identificar la sucursal del usuario.");
+      return;
+    }
+    
     setLoading(true);
     try {
-      const url = query
-        ? `http://localhost:3000/api/medicamentos/buscar/activos?nombre=${query}`
-        : 'http://localhost:3000/api/medicamentos/activos';
-      const response = await axios.get(url);
+
+      const url = `http://localhost:3000/api/medicamentos/stock/${idSucursal}`;
+      const response = await API.get(url);      
       setMedicamentos(response.data);
     } catch (err) {
       setError('No se pudieron cargar los medicamentos.');
@@ -41,13 +48,10 @@ function ActualizarStock() {
   };
 
   useEffect(() => {
-    fetchMedicamentos();
-  }, []);
-
-  const handleSearch = (e) => {
-    e.preventDefault();
-    fetchMedicamentos(searchTerm);
-  };
+    if(idSucursal) {
+        fetchMedicamentos();
+    }
+  }, [idSucursal]); 
 
   const handleEditClick = (medicamento) => {
     setSelectedMedicamento(medicamento);
@@ -69,15 +73,25 @@ function ActualizarStock() {
     setModalError('');
 
     try {
-      await axios.put(`http://localhost:3000/api/medicamentos/${selectedMedicamento.id}/stock`, {
-        cantidad: Number(stockChange)
-      });
+      const payload = {
+        cantidad: Number(stockChange),
+        idSucursal: idSucursal 
+      };
+
+      await API.put(`http://localhost:3000/api/medicamentos/${selectedMedicamento.id}/stock`, payload);
+      
       handleCloseModal();
-      fetchMedicamentos(searchTerm);
+      fetchMedicamentos(); 
+
     } catch (err) {
+      console.error("Error al actualizar stock:", err);
       setModalError('Error al actualizar el stock.');
     }
   };
+
+  const filteredMedicamentos = medicamentos.filter(med => 
+    med.nombre.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <>
@@ -85,10 +99,13 @@ function ActualizarStock() {
         <h1 className="stock-title">Tabla de Gestión de Stock</h1>
 
         <div className="stock-header">
-          <form onSubmit={handleSearch} className="search-form">
-            <input type="text" placeholder="Búsqueda por nombre..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="stock-input" />
-            <button type="submit" className="stock-button filter-btn">Filtrar</button>
-          </form>
+          <input 
+            type="text" 
+            placeholder="Búsqueda por nombre..." 
+            value={searchTerm} 
+            onChange={(e) => setSearchTerm(e.target.value)} 
+            className="stock-input" 
+          />
         </div>
 
         {error && <p className="error-message">{error}</p>}
@@ -105,11 +122,11 @@ function ActualizarStock() {
                 </tr>
               </thead>
               <tbody>
-                {medicamentos.map((med) => (
+                {filteredMedicamentos.map((med) => (
                   <tr key={med.id}>
                     <td>{med.id}</td>
                     <td>{med.nombre}</td>
-                    <td>{med.stock}</td>
+                    <td>{med.stock}</td> 
                     <td>
                       <button onClick={() => handleEditClick(med)} className="action-btn edit-btn">
                         Agregar Stock
@@ -155,4 +172,3 @@ function ActualizarStock() {
 }
 
 export default ActualizarStock;
-

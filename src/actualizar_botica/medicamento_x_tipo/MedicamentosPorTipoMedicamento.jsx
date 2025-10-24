@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
-
+import API from '../../backend/conexion.js';
 
 function MedicamentosPorTipo() {
+    const user = JSON.parse(localStorage.getItem("user"));
+    const idSucursal = user?.idSucursal;
+
     const [tipos, setTipos] = useState([]);
     const [medicamentos, setMedicamentos] = useState([]);
     const [selectedTipoId, setSelectedTipoId] = useState('');
@@ -12,7 +14,7 @@ function MedicamentosPorTipo() {
     useEffect(() => {
         const fetchTipos = async () => {
             try {
-                const response = await axios.get('http://localhost:3000/api/tipoMedicamentos/activos');
+                const response = await API.get('/tipoMedicamentos/activos');
                 setTipos(response.data);
             } catch (err) {
                 console.error("Error al cargar los tipos de medicamento:", err);
@@ -23,7 +25,7 @@ function MedicamentosPorTipo() {
     }, []);
 
     useEffect(() => {
-        if (!selectedTipoId) {
+        if (!selectedTipoId || !idSucursal) {
             setMedicamentos([]);
             return;
         }
@@ -32,7 +34,9 @@ function MedicamentosPorTipo() {
             setLoading(true);
             setError('');
             try {
-                const response = await axios.get(`http://localhost:3000/api/medicamentos/tipo/${selectedTipoId}`);
+                const response = await API.get(
+                    `/medicamentos/tipo/${selectedTipoId}?sucursal=${idSucursal}`
+                );
                 setMedicamentos(response.data);
             } catch (err) {
                 console.error("Error al cargar medicamentos por tipo:", err);
@@ -43,7 +47,7 @@ function MedicamentosPorTipo() {
         };
 
         fetchMedicamentosPorTipo();
-    }, [selectedTipoId]);
+    }, [selectedTipoId, idSucursal]); 
 
     return (
         <div className="reporte-container">
@@ -65,7 +69,8 @@ function MedicamentosPorTipo() {
                     ))}
                 </select>
             </div>
-
+            
+            {!idSucursal && <p className="error-message">No se pudo detectar la sucursal del usuario.</p>}
             {error && <p className="error-message">{error}</p>}
 
             <table className="reporte-table">
@@ -82,7 +87,7 @@ function MedicamentosPorTipo() {
                 <tbody>
                     {loading ? (
                         <tr>
-                            <td colSpan="5" className="status-message">Cargando...</td>
+                            <td colSpan="6" className="status-message">Cargando...</td>
                         </tr>
                     ) : medicamentos.length > 0 ? (
                         medicamentos.map((med) => (
@@ -97,7 +102,7 @@ function MedicamentosPorTipo() {
                         ))
                     ) : (
                         <tr>
-                            <td colSpan="5" className="status-message">
+                            <td colSpan="6" className="status-message">
                                 {selectedTipoId ? "No hay medicamentos para este tipo." : "Seleccione un tipo para ver los resultados."}
                             </td>
                         </tr>
