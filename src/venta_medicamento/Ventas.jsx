@@ -53,8 +53,8 @@ export default function Ventas() {
   // === Filtrado por fechas ===
   const ventasFiltradas = ventas.filter((v) => {
     const fechaVenta = new Date(v.fecha);
-    const desdeOk = fechaDesde ? fechaVenta >= new Date(fechaDesde) : true;
-    const hastaOk = fechaHasta ? fechaVenta <= new Date(fechaHasta) : true;
+    const desdeOk = fechaDesde ? fechaVenta >= new Date(fechaDesde + "T00:00:00") : true;
+    const hastaOk = fechaHasta ? fechaVenta <= new Date(fechaHasta + "T23:59:59") : true;
     return desdeOk && hastaOk;
   });
 
@@ -146,7 +146,6 @@ export default function Ventas() {
       <div className="filtros">
         <input type="date" value={fechaDesde} onChange={(e) => setFechaDesde(e.target.value)} />
         <input type="date" value={fechaHasta} onChange={(e) => setFechaHasta(e.target.value)} />
-        <button onClick={() => setPagina(1)} className="btn-buscar">Buscar</button>
         <button onClick={() => setModalAbierto(true)} className="btn-registrar">Registrar Venta</button>
       </div>
 
