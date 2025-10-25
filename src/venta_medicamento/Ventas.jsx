@@ -23,7 +23,6 @@ export default function Ventas() {
     setTimeout(() => setMensaje(""), 3000);
   };
 
-  // === Obtener ventas ===
   const fetchVentas = async () => {
     try {
       const res = await API.get(`/ventas?idSucursal=${idSucursal}`);
@@ -34,7 +33,6 @@ export default function Ventas() {
     }
   };
 
-  // === Obtener medicamentos ===
   const fetchMedicamentos = async () => {
     try {
       const res = await API.get(`/medicamentos/stock/${idSucursal}`);
@@ -50,7 +48,6 @@ export default function Ventas() {
     fetchMedicamentos();
   }, []);
 
-  // === Filtrado por fechas ===
   const ventasFiltradas = ventas.filter((v) => {
     const fechaVenta = new Date(v.fecha);
     const desdeOk = fechaDesde ? fechaVenta >= new Date(fechaDesde + "T00:00:00") : true;
@@ -58,14 +55,12 @@ export default function Ventas() {
     return desdeOk && hastaOk;
   });
 
-  // === Paginación ===
   const totalPaginas = Math.ceil(ventasFiltradas.length / registrosPorPagina);
   const ventasPagina = ventasFiltradas.slice(
     (pagina - 1) * registrosPorPagina,
     pagina * registrosPorPagina
   );
 
-  // === Agregar medicamento ===
   const agregarMedicamento = () => {
     if (!medicamentoSeleccionado || cantidad <= 0) {
       mostrarMensaje("⚠️ Selecciona un medicamento y cantidad válida.");
@@ -89,20 +84,17 @@ export default function Ventas() {
     setMedicamentoSeleccionado("");
   };
 
-  // === Quitar medicamento ===
   const quitarMedicamento = (index) => {
     const prod = productos[index];
     setMedicamentos([...medicamentos, { id: prod.idMedicamento, nombre: prod.nombre, precio: prod.precioUnitario }]);
     setProductos(productos.filter((_, i) => i !== index));
   };
 
-  // === Calcular total ===
   useEffect(() => {
     const total = productos.reduce((sum, p) => sum + (p.subtotal || 0), 0);
     setTotalVenta(total);
   }, [productos]);
 
-  // === Registrar venta ===
   const registrarVenta = async () => {
     if (productos.length === 0) return mostrarMensaje("⚠️ Agrega al menos un medicamento.");
 
@@ -134,7 +126,6 @@ export default function Ventas() {
     }
   };
 
-  // === Estado para registro dinámico ===
   const [medicamentoSeleccionado, setMedicamentoSeleccionado] = useState("");
   const [cantidad, setCantidad] = useState(1);
 
@@ -142,7 +133,6 @@ export default function Ventas() {
     <div className="ventas-container">
       <h2>🧾 Registro de Ventas</h2>
 
-      {/* Filtros */}
       <div className="filtros">
         <input type="date" value={fechaDesde} onChange={(e) => setFechaDesde(e.target.value)} />
         <input type="date" value={fechaHasta} onChange={(e) => setFechaHasta(e.target.value)} />
@@ -151,7 +141,6 @@ export default function Ventas() {
 
       {mensaje && <div className="toast">{mensaje}</div>}
 
-      {/* Tabla Ventas */}
       <table className="tabla-ventas">
         <thead>
           <tr>
@@ -179,7 +168,6 @@ export default function Ventas() {
         </tbody>
       </table>
 
-      {/* Paginación */}
       <div className="paginacion">
         {Array.from({ length: totalPaginas }, (_, i) => (
           <button key={i} onClick={() => setPagina(i + 1)} className={i + 1 === pagina ? "pagina-activa" : ""}>
@@ -188,7 +176,6 @@ export default function Ventas() {
         ))}
       </div>
 
-      {/* Modal Registrar Venta */}
       {modalAbierto && (
         <div className="modal-overlay" onClick={() => setModalAbierto(false)}>
           <div className="modal modal-grande" onClick={(e) => e.stopPropagation()}>
@@ -253,7 +240,6 @@ export default function Ventas() {
         </div>
       )}
 
-      {/* Modal Detalle Venta */}
       {modalDetalle && (
         <div className="modal-overlay" onClick={() => setModalDetalle(null)}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
@@ -278,7 +264,9 @@ export default function Ventas() {
                 ))}
               </tbody>
             </table>
-            <button onClick={() => setModalDetalle(null)} className="btn-cancelar">Cerrar</button>
+            <div className="modal-buttons">
+              <button onClick={() => setModalDetalle(null)} className="btn-cancelar">Cerrar</button>
+            </div>
           </div>
         </div>
       )}

@@ -13,6 +13,7 @@ import ActualizarMedicamento from "../src/actualizar_botica/actualizar-medicamen
 import MedicamentosPorLaboratorio from './actualizar_botica/medicamento_x_laboratorio/MedicamentosPorLaboratorio.jsx';
 import MedicamentosPorTipo from './actualizar_botica/medicamento_x_tipo/MedicamentosPorTipoMedicamento.jsx';
 import Ventas from "../src/venta_medicamento/Ventas.jsx";
+import Reportes from './reporte_medicamento/Reportes.jsx';
 import './App.css';
 
 function App() {
@@ -33,6 +34,7 @@ function App() {
           <Route path="/medicamento-por-laboratorio" element={<MedicamentosPorLaboratorio />} />
           <Route path="/medicamento-por-tipo" element={<MedicamentosPorTipo />} />
           <Route path="/ventas" element={<Ventas />} />
+          <Route path="/reportes" element={<Reportes />} />
         </Route>
 
 

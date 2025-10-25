@@ -96,6 +96,21 @@ th {
   width: 90%;
 }
 
+.modal-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px; 
+  margin-top: 25px; 
+}
+
+.modal-buttons button {
+  padding: 6px 6px; 
+  font-size: 0.9em;     
+  min-width: 110px;   
+}
+
+
 .toast {
   position: fixed;
   top: 20px;

@@ -49,7 +49,7 @@ function MainLayout() {
           <Link to="/ventas" className="nav-item">
             Ventas
           </Link>
-          <Link to="/" className="nav-item">
+          <Link to="/reportes" className="nav-item">
             Reportes
           </Link>
         </nav>
