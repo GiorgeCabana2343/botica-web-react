@@ -70,6 +70,11 @@ export default function Ventas() {
     const med = medicamentos.find((m) => m.id === parseInt(medicamentoSeleccionado));
     if (!med) return;
 
+    if (cantidad > med.stock) {
+      mostrarMensaje(`⚠️ Stock insuficiente. Solo hay ${med.stock} unidad(es) disponibles`);
+      return;
+    }
+
     const nuevoProducto = {
       idMedicamento: med.id,
       nombre: med.nombre,

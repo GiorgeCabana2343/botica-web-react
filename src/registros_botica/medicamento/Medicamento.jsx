@@ -31,7 +31,7 @@ function RegistroMedicamento() {
     if (!idSucursal) return; 
     try {
       const [medRes, tiposRes, labsRes] = await Promise.all([
-        API.get(`/medicamentos/stock/${idSucursal}`),
+        API.get(`/medicamentos/ignoreStock/${idSucursal}`),
         API.get("/tipoMedicamentos/activos"),
         API.get("/laboratorios/activos"),
       ]);

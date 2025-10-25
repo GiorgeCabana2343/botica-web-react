@@ -37,7 +37,7 @@ function ActualizarStock() {
     setLoading(true);
     try {
 
-      const url = `http://localhost:3000/api/medicamentos/stock/${idSucursal}`;
+      const url = `http://localhost:3000/api/medicamentos/ignoreStock/${idSucursal}`;
       const response = await API.get(url);      
       setMedicamentos(response.data);
     } catch (err) {
