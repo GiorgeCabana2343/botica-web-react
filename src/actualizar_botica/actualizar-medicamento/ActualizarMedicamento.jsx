@@ -3,6 +3,8 @@ import API from "../../backend/conexion.js";
 import "./ActualizarMedicamento.css";
 
 function ActualizarMedicamento() {
+  const user = JSON.parse(localStorage.getItem("user"));
+  const idSucursal = user?.idSucursal || 1;
   const [medicamentos, setMedicamentos] = useState([]);
   const [tipos, setTipos] = useState([]);
   const [laboratorios, setLaboratorios] = useState([]);
@@ -24,7 +26,7 @@ function ActualizarMedicamento() {
     const fetchData = async () => {
       try {
         const [meds, tiposRes, labsRes] = await Promise.all([
-          API.get("/medicamentos/activos"),
+          API.get(`/medicamentos/stock/${idSucursal}`),
           API.get("/tipoMedicamentos/activos"),
           API.get("/laboratorios/activos"),
         ]);
@@ -73,7 +75,7 @@ function ActualizarMedicamento() {
     e.preventDefault();
     try {
       await API.put(`/medicamentos/${selectedMedicamento.id}`, form);
-      const res = await API.get("/medicamentos/activos");
+      const res = await API.get(`/medicamentos/stock/${idSucursal}`);
       setMedicamentos(res.data);
       setShowModal(false);
       setShowToast(true);
