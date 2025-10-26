@@ -1,0 +1,75 @@
+# Sistema de Gestión de Botica (Frontend)  फार्मेसी
+
+Este es el frontend para el proyecto **Botica Web**, un sistema de gestión de inventario y ventas para una farmacia. Esta aplicación está construida con **React**, **Vite** y **TypeScript**.
+
+## ✨ Funcionalidades Principales
+
+Este proyecto implementa varias vistas y funcionalidades clave para la administración de la botica:
+
+* **Autenticación:** Login y registro de usuarios (gestionado por el backend).
+* **Gestión de Medicamentos:**
+    * **Registrar Medicamentos:** Formulario para añadir nuevos productos al inventario.
+    * **Actualizar Medicamentos:** Formulario para editar la información (nombre, precio, tipo, laboratorio) de productos existentes.
+    * **Actualizar Stock:** Interfaz dedicada para añadir stock a los medicamentos.
+* **Clasificación:**
+    * Gestión de **Tipos de Medicamento** (crear, activar/desactivar).
+    * Gestión de **Laboratorios** (crear, activar/desactivar).
+* **Ventas:**
+    * **Registro de Ventas:** Interfaz principal para seleccionar productos, añadirlos a un carrito y procesar una venta.
+    * **Detalle de Ventas:** Modal para ver los productos incluidos en una venta ya realizada.
+* **Reportes:**
+    * Panel de **KPIs** (Ventas Totales, Número de Ventas).
+    * Gráficos de ventas diarias y top 10 de productos.
+    * Tabla de alertas de stock bajo.
+* **Diseño Responsivo:** Todas las vistas están diseñadas para ser funcionales y verse bien en dispositivos móviles, tabletas y escritorio.
+
+## 💻 Stack Tecnológico
+
+* **Framework:** [React 18](https://reactjs.org/)
+* **Bundler:** [Vite](https://vitejs.dev/)
+* **Lenguaje:** [TypeScript](https://www.typescriptlang.org/)
+* **Routing:** [React Router DOM](https://reactrouter.com/)
+* **Peticiones HTTP:** [Axios](https://axios-http.com/) (o un cliente API personalizado)
+* **Estilos:** CSS Básico (con archivos `.css` por componente).
+
+## 🚀 Instalación y Puesta en Marcha
+
+Sigue estos pasos para levantar el proyecto en tu entorno local.
+
+1.  **Clonar el repositorio:**
+    ```bash
+    git clone [https://github.com/JorgeCabana2343/botica-web-react.git](https://github.com/JorgeCabana2343/botica-web-react.git)
+    ```
+
+2.  **Navegar al directorio:**
+    ```bash
+    cd botica-web-react
+    ```
+
+3.  **Instalar dependencias:**
+    (Si usas npm)
+    ```bash
+    npm install
+    ```
+    (Si usas yarn)
+    ```bash
+    yarn install
+    ```
+
+4.  **Ejecutar el servidor de desarrollo:**
+    ```bash
+    npm run dev
+    ```
+
+5.  Abre [http://localhost:5173](http://localhost:5173) (o el puerto que indique Vite) en tu navegador.
+
+## 🔌 Conexión con el Backend
+
+Este frontend **requiere** que el [servidor backend](https://github.com/URL-DE-TU-BACKEND) (Node.js/Express/MySQL) esté en ejecución para funcionar.
+
+Por defecto, la aplicación intentará conectarse a la API en `http://localhost:3000/api`. Asegúrate de que tu servidor backend esté corriendo en ese puerto o actualiza la URL base en el archivo de conexión (`src/backend/conexion.js`).
+
+## 👥 Colaboradores
+
+* [JorgeCabana2343](https://github.com/JorgeCabana2343)
+* [Zambrano777](https://github.com/Zambrano777)
