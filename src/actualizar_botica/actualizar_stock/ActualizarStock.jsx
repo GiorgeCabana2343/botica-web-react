@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import API from '../../backend/conexion.js'; 
-import "./ActualizarStock.css";
+import API from '../../backend/conexion.js';
+import "./ActualizarStock.css"; 
 
 function Modal({ isOpen, onClose, children }) {
   if (!isOpen) return null;
@@ -33,14 +33,15 @@ function ActualizarStock() {
       setError("No se pudo identificar la sucursal del usuario.");
       return;
     }
-    
-    setLoading(true);
-    try {
 
+    setLoading(true);
+    setError(null);
+    try {
       const url = `http://localhost:3000/api/medicamentos/ignoreStock/${idSucursal}`;
-      const response = await API.get(url);      
+      const response = await API.get(url);
       setMedicamentos(response.data);
     } catch (err) {
+      console.error("Error fetching medicamentos:", err);
       setError('No se pudieron cargar los medicamentos.');
     } finally {
       setLoading(false);
@@ -48,10 +49,13 @@ function ActualizarStock() {
   };
 
   useEffect(() => {
-    if(idSucursal) {
-        fetchMedicamentos();
+    if (idSucursal) {
+      fetchMedicamentos();
+    } else {
+        setLoading(false);
+        setError("No se pudo identificar la sucursal del usuario.");
     }
-  }, [idSucursal]); 
+  }, [idSucursal]);
 
   const handleEditClick = (medicamento) => {
     setSelectedMedicamento(medicamento);
@@ -63,33 +67,37 @@ function ActualizarStock() {
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setSelectedMedicamento(null);
+    setStockChange('');
+    setModalError('');
   };
 
   const handleUpdateStock = async () => {
-    if (!selectedMedicamento || Number(stockChange) <= 0) {
-      setModalError('La cantidad a agregar debe ser un número positivo.');
+    const amountToAdd = Number(stockChange);
+    if (!selectedMedicamento || !Number.isInteger(amountToAdd) || amountToAdd <= 0) {
+      setModalError('La cantidad a agregar debe ser un número entero positivo.');
       return;
     }
     setModalError('');
 
     try {
       const payload = {
-        cantidad: Number(stockChange),
-        idSucursal: idSucursal 
+        cantidad: amountToAdd,
+        idSucursal: idSucursal
       };
 
       await API.put(`http://localhost:3000/api/medicamentos/${selectedMedicamento.id}/stock`, payload);
-      
+
       handleCloseModal();
-      fetchMedicamentos(); 
+      fetchMedicamentos();
 
     } catch (err) {
       console.error("Error al actualizar stock:", err);
-      setModalError('Error al actualizar el stock.');
+      const errorMsg = err.response?.data?.message || 'Error al actualizar el stock.';
+      setModalError(errorMsg);
     }
   };
 
-  const filteredMedicamentos = medicamentos.filter(med => 
+  const filteredMedicamentos = medicamentos.filter(med =>
     med.nombre.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -99,19 +107,18 @@ function ActualizarStock() {
         <h1 className="stock-title">Tabla de Gestión de Stock</h1>
 
         <div className="stock-header">
-          <input 
-            type="text" 
-            placeholder="Búsqueda por nombre..." 
-            value={searchTerm} 
-            onChange={(e) => setSearchTerm(e.target.value)} 
-            className="stock-input" 
+          <input
+            type="text"
+            placeholder="Búsqueda por nombre..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="stock-input"
           />
         </div>
 
         {error && <p className="error-message">{error}</p>}
 
         {loading ? <p>Cargando...</p> : (
-          <div className="table-wrapper">
             <table className="stock-table">
               <thead>
                 <tr>
@@ -122,22 +129,30 @@ function ActualizarStock() {
                 </tr>
               </thead>
               <tbody>
-                {filteredMedicamentos.map((med) => (
-                  <tr key={med.id}>
-                    <td>{med.id}</td>
-                    <td>{med.nombre}</td>
-                    <td>{med.stock}</td> 
-                    <td>
-                      <button onClick={() => handleEditClick(med)} className="action-btn edit-btn">
-                        Agregar Stock
-                      </button>
-                    </td>
-                  </tr>
-                ))}
+                {filteredMedicamentos.length > 0 ? (
+                    filteredMedicamentos.map((med) => (
+                    <tr key={med.id}>
+                      <td data-label="ID">{med.id}</td>
+                      <td data-label="Nombre">{med.nombre}</td>
+                      <td data-label="Stock Actual">{med.stock}</td>
+                      <td> 
+                        <button onClick={() => handleEditClick(med)} className="action-btn edit-btn">
+                          Agregar Stock
+                        </button>
+                      </td>
+                    </tr>
+                    ))
+                ) : (
+                    <tr>
+                        <td colSpan="4" style={{ textAlign: 'center', padding: '20px', display: 'block' /* For card layout */ }}>
+                            No se encontraron medicamentos {searchTerm ? `con el nombre "${searchTerm}"` : ''}.
+                        </td>
+                    </tr>
+                )}
               </tbody>
             </table>
-          </div>
         )}
+
 
         <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
           {selectedMedicamento && (
@@ -147,14 +162,17 @@ function ActualizarStock() {
               <p>Stock actual: <strong>{selectedMedicamento.stock}</strong></p>
 
               <div className="modal-form-group">
-                <label>Cantidad a agregar:</label>
+                <label htmlFor="stockChangeInput">Cantidad a agregar:</label>
                 <input
+                  id="stockChangeInput" // Added id for label association
                   type="number"
                   className="modal-input"
                   value={stockChange}
                   onChange={(e) => setStockChange(e.target.value)}
                   placeholder="Ej: 50"
                   min="1"
+                  step="1" // Ensure integer input if needed
+                  required // Add required attribute
                 />
               </div>
 

@@ -18,7 +18,7 @@ function ActualizarMedicamento() {
     idLaboratorio: "",
   });
 
-  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState(""); 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 15;
 
@@ -35,10 +35,12 @@ function ActualizarMedicamento() {
         setLaboratorios(labsRes.data);
       } catch (err) {
         console.error("Error cargando datos:", err);
+        setToastMessage("❌ Error al cargar datos");
+        setTimeout(() => setToastMessage(""), 3000);
       }
     };
     fetchData();
-  }, []);
+  }, [idSucursal]); 
 
   const filteredMedicamentos = medicamentos.filter((m) =>
     m.nombre.toLowerCase().includes(filtro.toLowerCase())
@@ -73,21 +75,40 @@ function ActualizarMedicamento() {
 
   const handleUpdate = async (e) => {
     e.preventDefault();
+    if (!selectedMedicamento) return;
+
+    if (!form.nombre || !form.precio || !form.idTipoMedicamento || !form.idLaboratorio) {
+      setToastMessage("⚠️ Por favor complete todos los campos");
+      setTimeout(() => setToastMessage(""), 3000);
+      return;
+    }
+
+
     try {
-      await API.put(`/medicamentos/${selectedMedicamento.id}`, form);
+      const payload = {
+        nombre: form.nombre,
+        precio: Number(form.precio),
+        idTipoMedicamento: Number(form.idTipoMedicamento),
+        idLaboratorio: Number(form.idLaboratorio)
+      };
+      await API.put(`/medicamentos/${selectedMedicamento.id}`, payload);
       const res = await API.get(`/medicamentos/ignoreStock/${idSucursal}`);
       setMedicamentos(res.data);
       setShowModal(false);
-      setShowToast(true);
-      setTimeout(() => setShowToast(false), 3000);
+      setToastMessage("✅ Medicamento actualizado");
+      setTimeout(() => setToastMessage(""), 3000);
     } catch (err) {
       console.error("Error actualizando medicamento:", err);
-      alert("❌ No se pudo actualizar el medicamento");
+      const errorMsg = err.response?.data?.message || "No se pudo actualizar el medicamento";
+      setToastMessage(`❌ ${errorMsg}`);
+      setTimeout(() => setToastMessage(""), 3000);
     }
   };
 
   return (
     <div className="actualizar-container">
+      {toastMessage && <div className={`toast ${toastMessage ? 'show' : ''}`}>{toastMessage}</div>}
+
       <div className="header">
         <h1>Actualizar Medicamentos</h1>
       </div>
@@ -95,7 +116,10 @@ function ActualizarMedicamento() {
         type="text"
         placeholder="Buscar por nombre..."
         value={filtro}
-        onChange={(e) => setFiltro(e.target.value)}
+        onChange={(e) => {
+          setFiltro(e.target.value);
+          setCurrentPage(1);
+        }}
         className="filtro-input"
       />
 
@@ -114,11 +138,11 @@ function ActualizarMedicamento() {
           {currentMedicamentos.length > 0 ? (
             currentMedicamentos.map((m) => (
               <tr key={m.id}>
-                <td>{m.id}</td>
-                <td>{m.nombre}</td>
-                <td>{m.precio}</td>
-                <td>{m.tipoMedicamento}</td>
-                <td>{m.laboratorio}</td>
+                <td data-label="ID">{m.id}</td>
+                <td data-label="Nombre">{m.nombre}</td>
+                <td data-label="Precio (S/)">{Number(m.precio).toFixed(2)}</td>
+                <td data-label="Tipo">{m.tipoMedicamento}</td>
+                <td data-label="Laboratorio">{m.laboratorio}</td>
                 <td>
                   <button className="btn-actualizar" onClick={() => handleOpenModal(m)}>
                     ✏️ Actualizar
@@ -128,47 +152,54 @@ function ActualizarMedicamento() {
             ))
           ) : (
             <tr>
-              <td colSpan="6" className="sin-resultados">
-                No hay medicamentos para mostrar.
+              <td colSpan="6" className="sin-resultados" style={{ display: 'block' }}>
+                No hay medicamentos para mostrar {filtro ? `con el nombre "${filtro}"` : ''}.
               </td>
             </tr>
           )}
         </tbody>
       </table>
 
-      <div className="pagination">
-        <button onClick={() => goToPage(currentPage - 1)} disabled={currentPage === 1}>
-          ◀
-        </button>
-        <span>Página {currentPage} de {totalPages || 1}</span>
-        <button onClick={() => goToPage(currentPage + 1)} disabled={currentPage === totalPages}>
-          ▶
-        </button>
-      </div>
+      {totalPages > 0 && ( 
+        <div className="pagination">
+          <button onClick={() => goToPage(currentPage - 1)} disabled={currentPage === 1}>
+            ◀
+          </button>
+          <span>Página {currentPage} de {totalPages || 1}</span>
+          <button onClick={() => goToPage(currentPage + 1)} disabled={currentPage >= totalPages}>
+            ▶
+          </button>
+        </div>
+      )}
+
 
       {showModal && (
         <div className="modal-overlay" onClick={() => setShowModal(false)}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
             <h3>Actualizar Medicamento</h3>
             <form onSubmit={handleUpdate}>
-              <label>Nombre:</label>
-              <input name="nombre" value={form.nombre} onChange={handleChange} required className="input-corto" />
-              <label>Precio (S/):</label>
-              <input name="precio" type="number" step="0.01" value={form.precio} onChange={handleChange} required className="input-corto" />
-              <label>Tipo de Medicamento:</label>
-              <select name="idTipoMedicamento" value={form.idTipoMedicamento} onChange={handleChange} required className="input-corto">
+              <label htmlFor="nombre-modal">Nombre:</label>
+              <input id="nombre-modal" name="nombre" value={form.nombre} onChange={handleChange} required className="input-corto" />
+
+              <label htmlFor="precio-modal">Precio (S/):</label>
+              <input id="precio-modal" name="precio" type="number" step="0.01" min="0" value={form.precio} onChange={handleChange} required className="input-corto" />
+
+              <label htmlFor="tipo-modal">Tipo de Medicamento:</label>
+              <select id="tipo-modal" name="idTipoMedicamento" value={form.idTipoMedicamento} onChange={handleChange} required className="input-corto">
                 <option value="">Seleccione...</option>
                 {tipos.map((t) => (
                   <option key={t.id} value={t.id}>{t.descripcion}</option>
                 ))}
               </select>
-              <label>Laboratorio:</label>
-              <select name="idLaboratorio" value={form.idLaboratorio} onChange={handleChange} required className="input-corto">
+
+              <label htmlFor="lab-modal">Laboratorio:</label>
+              <select id="lab-modal" name="idLaboratorio" value={form.idLaboratorio} onChange={handleChange} required className="input-corto">
                 <option value="">Seleccione...</option>
                 {laboratorios.map((l) => (
                   <option key={l.id} value={l.id}>{l.descripcion}</option>
                 ))}
               </select>
+
               <div className="modal-botones">
                 <button type="submit" className="btn-guardar">Guardar Cambios</button>
                 <button type="button" className="btn-cancelar" onClick={() => setShowModal(false)}>Cancelar</button>
@@ -177,7 +208,6 @@ function ActualizarMedicamento() {
           </div>
         </div>
       )}
-      {showToast && <div className="toast show">✅ Medicamento actualizado</div>}
     </div>
   );
 }

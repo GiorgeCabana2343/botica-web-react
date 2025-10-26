@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import API from '../../backend/conexion.js';
+import './MedicamentoPorTipoMedicamento.css';
 
 function MedicamentosPorTipo() {
     const user = JSON.parse(localStorage.getItem("user"));
@@ -72,43 +73,45 @@ function MedicamentosPorTipo() {
             
             {!idSucursal && <p className="error-message">No se pudo detectar la sucursal del usuario.</p>}
             {error && <p className="error-message">{error}</p>}
-
-            <table className="reporte-table">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Nombre</th>
-                        <th>Precio</th>
-                        <th>Stock</th>
-                        <th>Tipo de Medicamento</th>
-                        <th>Laboratorio</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {loading ? (
+            
+            <div className="table-wrapper">
+                <table className="reporte-table">
+                    <thead>
                         <tr>
-                            <td colSpan="6" className="status-message">Cargando...</td>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Precio</th>
+                            <th>Stock</th>
+                            <th>Tipo de Medicamento</th>
+                            <th>Laboratorio</th>
                         </tr>
-                    ) : medicamentos.length > 0 ? (
-                        medicamentos.map((med) => (
-                            <tr key={med.id}>
-                                <td>{med.id}</td>
-                                <td>{med.nombre}</td>
-                                <td>S/ {Number(med.precio).toFixed(2)}</td>
-                                <td>{med.stock}</td>
-                                <td>{med.tipoMedicamento}</td>
-                                <td>{med.laboratorio}</td>
+                    </thead>
+                    <tbody>
+                        {loading ? (
+                            <tr>
+                                <td colSpan="6" className="status-message">Cargando...</td>
                             </tr>
-                        ))
-                    ) : (
-                        <tr>
-                            <td colSpan="6" className="status-message">
-                                {selectedTipoId ? "No hay medicamentos para este tipo." : "Seleccione un tipo para ver los resultados."}
-                            </td>
-                        </tr>
-                    )}
-                </tbody>
-            </table>
+                        ) : medicamentos.length > 0 ? (
+                            medicamentos.map((med) => (
+                                <tr key={med.id}>
+                                    <td data-label="ID">{med.id}</td>
+                                    <td data-label="Nombre">{med.nombre}</td>
+                                    <td data-label="Precio">S/ {Number(med.precio).toFixed(2)}</td>
+                                    <td data-label="Stock">{med.stock}</td>
+                                    <td data-label="Tipo de Medicamento">{med.tipoMedicamento}</td>
+                                    <td data-label="Laboratorio">{med.laboratorio}</td>
+                                </tr>
+                            ))
+                        ) : (
+                            <tr>
+                                <td colSpan="6" className="status-message">
+                                    {selectedTipoId ? "No hay medicamentos para este tipo." : "Seleccione un tipo para ver los resultados."}
+                                </td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
+            </div>
         </div>
     );
 }

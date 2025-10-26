@@ -161,7 +161,7 @@ function Home() {
       </section>
 
       <section className="empleados-section">
-        <h2 className="section-title">Conoce a Nuestro Equipo</h2>
+        <h2 className="section-title">Nuestro Equipo</h2>
         <div className="empleados-container">
           {empleados.map((empleado, index) => (
             <div className="empleado-card" key={index}>

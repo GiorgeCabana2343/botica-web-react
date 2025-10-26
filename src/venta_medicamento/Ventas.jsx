@@ -160,11 +160,11 @@ export default function Ventas() {
         <tbody>
           {ventasPagina.map((v) => (
             <tr key={v.idVenta}>
-              <td>{v.idVenta}</td>
-              <td>{new Date(v.fecha).toLocaleDateString()}</td>
-              <td>S/ {v.total.toFixed(2)}</td>
-              <td>{v.usuario}</td>
-              <td>{v.sucursal}</td>
+              <td data-label="ID">{v.idVenta}</td>
+              <td data-label="Fecha">{new Date(v.fecha).toLocaleDateString()}</td>
+              <td data-label="Total">S/ {v.total.toFixed(2)}</td>
+              <td data-label="Usuario">{v.usuario}</td>
+              <td data-label="Sucursal">{v.sucursal}</td>
               <td>
                 <button onClick={() => setModalDetalle(v)} className="btn-detalle">Detalle</button>
               </td>
@@ -223,10 +223,10 @@ export default function Ventas() {
               <tbody>
                 {productos.map((p, i) => (
                   <tr key={i}>
-                    <td>{p.nombre}</td>
-                    <td>{p.cantidad}</td>
-                    <td>S/ {p.precioUnitario.toFixed(2)}</td>
-                    <td>S/ {p.subtotal.toFixed(2)}</td>
+                    <td data-label="Nombre">{p.nombre}</td>
+                    <td data-label="Cantidad">{p.cantidad}</td>
+                    <td data-label="Precio Unitario">S/ {p.precioUnitario.toFixed(2)}</td>
+                    <td data-label="Subtotal">S/ {p.subtotal.toFixed(2)}</td>
                     <td><button className="btn-eliminar" onClick={() => quitarMedicamento(i)}>✖</button></td>
                   </tr>
                 ))}
@@ -261,10 +261,10 @@ export default function Ventas() {
               <tbody>
                 {modalDetalle.detalle.map((d, i) => (
                   <tr key={i}>
-                    <td>{d.medicamento}</td>
-                    <td>{d.cantidad}</td>
-                    <td>S/ {d.precioUnitario}</td>
-                    <td>S/ {d.subtotal}</td>
+                    <td data-label="Medicamento">{d.medicamento}</td>
+                    <td data-label="Cantidad">{d.cantidad}</td>
+                    <td data-label="Precio Unitario">S/ {d.precioUnitario}</td>
+                    <td data-label="Subtotal">S/ {d.subtotal}</td>
                   </tr>
                 ))}
               </tbody>

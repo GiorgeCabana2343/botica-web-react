@@ -79,7 +79,7 @@ function TipoMedicamento() {
           className="input-busqueda"
         />
         <button onClick={() => setShowModal(true)} className="btn-registrar">
-          ➕ Registrar Tipo
+          ➕ Registrar Tipo Medicamento
         </button>
       </div>
 

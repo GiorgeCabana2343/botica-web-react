@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import API from '../../backend/conexion.js'; 
-import './MedicamentosPorLaboratorio.css';
+import API from '../../backend/conexion.js';
+import './MedicamentosPorLaboratorio.css'; // Make sure this CSS has the card layout media query
 
 function MedicamentosPorLaboratorio() {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -15,7 +15,8 @@ function MedicamentosPorLaboratorio() {
   useEffect(() => {
     const fetchLaboratorios = async () => {
       try {
-        const response = await API.get('/laboratorios/activos'); 
+        setError('');
+        const response = await API.get('/laboratorios/activos');
         setLaboratorios(response.data);
       } catch (err) {
         console.error("Error al cargar laboratorios:", err);
@@ -27,7 +28,8 @@ function MedicamentosPorLaboratorio() {
 
   useEffect(() => {
     if (!selectedLabId || !idSucursal) {
-      setMedicamentos([]); 
+      setMedicamentos([]);
+      if (!selectedLabId) setError('');
       return;
     }
 
@@ -38,11 +40,12 @@ function MedicamentosPorLaboratorio() {
         const response = await API.get(
           `/medicamentos/laboratorio/${selectedLabId}?sucursal=${idSucursal}`
         );
-        
         setMedicamentos(response.data);
       } catch (err) {
         console.error("Error al cargar medicamentos por laboratorio:", err);
-        setError('Error al cargar los medicamentos.');
+        const errorMsg = err.response?.data?.message || 'Error al cargar los medicamentos.';
+        setError(errorMsg);
+        setMedicamentos([]);
       } finally {
         setLoading(false);
       }
@@ -54,13 +57,13 @@ function MedicamentosPorLaboratorio() {
   return (
     <div className="reporte-container">
       <h1 className="reporte-title">Lista de Medicamentos por Laboratorio</h1>
-      
+
       <div className="reporte-header">
         <label htmlFor="laboratorio-select">Laboratorio:</label>
-        <select 
-          id="laboratorio-select" 
-          value={selectedLabId} 
-          onChange={(e) => setSelectedLabId(e.target.value)} 
+        <select
+          id="laboratorio-select"
+          value={selectedLabId}
+          onChange={(e) => setSelectedLabId(e.target.value)}
           className="reporte-select"
         >
           <option value="">-- Seleccione un laboratorio --</option>
@@ -75,42 +78,47 @@ function MedicamentosPorLaboratorio() {
       {!idSucursal && <p className="error-message">No se pudo detectar la sucursal del usuario.</p>}
       {error && <p className="error-message">{error}</p>}
 
-      <table className="reporte-table">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Precio</th>
-            <th>Stock</th>
-            <th>Tipo de Medicamento</th>
-            <th>Laboratorio</th>
-          </tr>
-        </thead>
-        <tbody>
-          {loading ? (
+      {/* --- AÑADE ESTE DIV --- */}
+      <div className="table-wrapper">
+        <table className="reporte-table">
+          <thead>
             <tr>
-              <td colSpan="6" className="status-message">Cargando...</td>
+              <th>ID</th>
+              <th>Nombre</th>
+              <th>Precio</th>
+              <th>Stock</th>
+              <th>Tipo de Medicamento</th>
+              <th>Laboratorio</th>
             </tr>
-          ) : medicamentos.length > 0 ? (
-            medicamentos.map((med) => (
-              <tr key={med.id}>
-                <td>{med.id}</td>
-                <td>{med.nombre}</td>
-                <td>S/ {Number(med.precio).toFixed(2)}</td>
-                <td>{med.stock}</td>
-                <td>{med.tipoMedicamento}</td>
-                <td>{med.laboratorio}</td>
+          </thead>
+          <tbody>
+            {loading ? (
+              <tr>
+                <td colSpan="6" className="status-message">Cargando...</td>
               </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan="6" className="status-message">
-                {selectedLabId ? "No se encontraron medicamentos para este laboratorio." : "Seleccione un laboratorio para ver los resultados."}
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
+            ) : medicamentos.length > 0 ? (
+              medicamentos.map((med) => (
+                <tr key={med.id}>
+                  {/* --- AÑADE DATA-LABELS AQUÍ --- */}
+                  <td data-label="ID">{med.id}</td>
+                  <td data-label="Nombre">{med.nombre}</td>
+                  <td data-label="Precio">S/ {Number(med.precio).toFixed(2)}</td>
+                  <td data-label="Stock">{med.stock}</td>
+                  <td data-label="Tipo de Medicamento">{med.tipoMedicamento}</td>
+                  <td data-label="Laboratorio">{med.laboratorio}</td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="6" className="status-message">
+                  {selectedLabId ? "No se encontraron medicamentos para este laboratorio." : "Seleccione un laboratorio para ver los resultados."}
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+      {/* --- CIERRA EL DIV --- */}
     </div>
   );
 }

@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
-import API from "../../src/backend/conexion.js"; // Ajusta la ruta a tu API
-import "./Reportes.css"; // El CSS que crearemos a continuación
+import API from "../../src/backend/conexion.js";
+import "./Reportes.css";
 
-// Importar Chart.js
 import { Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -25,7 +24,7 @@ ChartJS.register(
 
 export default function Reportes() {
   const user = JSON.parse(localStorage.getItem("user"));
-  const idSucursal = user?.idSucursal || 1; 
+  const idSucursal = user?.idSucursal || 1;
 
   const [kpis, setKpis] = useState({ numeroVentas: 0, ventasTotales: 0 });
   const [ventasDiaData, setVentasDiaData] = useState(null);
@@ -35,23 +34,40 @@ export default function Reportes() {
 
   const optionsVentasDia = {
     responsive: true,
+    maintainAspectRatio: false, 
     plugins: {
       legend: { position: "top" },
       title: { display: true, text: "Ventas de los Últimos 30 Días" },
     },
+    scales: { 
+        y: {
+            beginAtZero: true
+        }
+    }
   };
 
   const optionsVentasMed = {
     indexAxis: 'y', 
     responsive: true,
+    maintainAspectRatio: false, 
     plugins: {
-      legend: { display: false },
+      legend: { display: false }, 
       title: { display: true, text: "Top 10 Medicamentos Más Vendidos" },
     },
+     scales: { 
+        x: {
+            beginAtZero: true
+        }
+    }
   };
 
   useEffect(() => {
-    if (!idSucursal) return;
+    if (!idSucursal) {
+        setLoading(false); 
+        console.error("No se encontró idSucursal");
+        return;
+    }
+
 
     const fetchAllData = async () => {
       try {
@@ -68,31 +84,44 @@ export default function Reportes() {
           API.get(`/reportes/stock-bajo?idSucursal=${idSucursal}`),
         ]);
 
-        setKpis(resKpis.data);
+        setKpis(resKpis.data || { numeroVentas: 0, ventasTotales: 0 });
 
-        setVentasDiaData({
-          labels: resVentasDia.data.map(d => new Date(d.dia).toLocaleDateString()),
-          datasets: [
-            {
-              label: "Total Vendido (S/)",
-              data: resVentasDia.data.map(d => d.totalVendido),
-              backgroundColor: "rgba(76, 110, 245, 0.6)", 
-            },
-          ],
-        });
+        if (resVentasDia.data && Array.isArray(resVentasDia.data)) {
+            setVentasDiaData({
+                labels: resVentasDia.data.map(d => new Date(d.dia).toLocaleDateString('es-PE', { day: '2-digit', month: '2-digit'})), // Formato DD/MM
+                datasets: [
+                {
+                    label: "Total Vendido (S/)",
+                    data: resVentasDia.data.map(d => d.totalVendido),
+                    backgroundColor: "rgba(76, 110, 245, 0.7)", 
+                    borderColor: "rgba(76, 110, 245, 1)", 
+                    borderWidth: 1,
+                },
+                ],
+            });
+        } else {
+             setVentasDiaData(null); 
+        }
 
-        setVentasMedData({
-          labels: resVentasMed.data.map(d => d.nombre),
-          datasets: [
-            {
-              label: "Cantidad Vendida",
-              data: resVentasMed.data.map(d => d.totalVendido),
-              backgroundColor: "rgba(34, 184, 207, 0.6)",
-            },
-          ],
-        });
+         if (resVentasMed.data && Array.isArray(resVentasMed.data)) {
+            setVentasMedData({
+                labels: resVentasMed.data.map(d => d.nombre),
+                datasets: [
+                {
+                    label: "Cantidad Vendida",
+                    data: resVentasMed.data.map(d => d.totalVendido), 
+                    backgroundColor: "rgba(34, 184, 207, 0.7)", 
+                    borderColor: "rgba(34, 184, 207, 1)", 
+                    borderWidth: 1,
+                },
+                ],
+            });
+         } else {
+              setVentasMedData(null);
+         }
 
-        setStockBajo(resStockBajo.data);
+
+        setStockBajo(resStockBajo.data || []);
 
       } catch (error) {
         console.error("Error al cargar reportes:", error);
@@ -105,34 +134,40 @@ export default function Reportes() {
   }, [idSucursal]);
 
   if (loading) {
-    return <div className="reportes-container"><h2>Cargando reportes...</h2></div>;
+    return <div className="reportes-container"><h2 className="reportes-titulo">Cargando reportes...</h2></div>;
   }
 
   return (
     <div className="reportes-container">
-      <h2>📊 Panel de Reportes</h2>
+      <h2 className="reportes-titulo">📊 Panel de Reportes</h2>
 
       <div className="kpi-grid">
         <div className="kpi-card">
           <h4>Ventas Totales</h4>
-          <p>S/ {kpis.ventasTotales.toFixed(2)}</p>
+          <p>S/ {(kpis.ventasTotales || 0).toFixed(2)}</p>
         </div>
         <div className="kpi-card">
           <h4>Número de Ventas</h4>
-          <p>{kpis.numeroVentas}</p>
+          <p>{kpis.numeroVentas || 0}</p>
         </div>
       </div>
 
       <div className="charts-grid">
         <div className="chart-container">
-          {ventasDiaData && (
-            <Bar options={optionsVentasDia} data={ventasDiaData} />
-          )}
+          <h3>Ventas Recientes</h3>
+          {ventasDiaData ? (
+             <div style={{ height: '300px', position: 'relative' }}>
+                <Bar options={optionsVentasDia} data={ventasDiaData} />
+            </div>
+          ) : <p>No hay datos de ventas diarias.</p>}
         </div>
         <div className="chart-container">
-          {ventasMedData && (
-            <Bar options={optionsVentasMed} data={ventasMedData} />
-          )}
+           <h3>Top Medicamentos</h3>
+          {ventasMedData ? (
+             <div style={{ height: '300px', position: 'relative' }}>
+                <Bar options={optionsVentasMed} data={ventasMedData} />
+            </div>
+          ) : <p>No hay datos de medicamentos más vendidos.</p>}
         </div>
       </div>
 
@@ -149,14 +184,14 @@ export default function Reportes() {
             <tbody>
               {stockBajo.map((item) => (
                 <tr key={item.idMedicamento}>
-                  <td>{item.nombre}</td>
-                  <td>{item.stock}</td>
+                  <td data-label="Medicamento">{item.nombre}</td>
+                  <td data-label="Stock Actual">{item.stock}</td>
                 </tr>
               ))}
             </tbody>
           </table>
         ) : (
-          <p>¡Todo bien! No hay medicamentos con stock bajo.</p>
+          <p style={{ textAlign: 'center', color: '#666' }}>¡Todo bien! No hay medicamentos con stock bajo.</p>
         )}
       </div>
     </div>
