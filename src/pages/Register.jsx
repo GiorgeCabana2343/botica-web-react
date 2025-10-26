@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 import "./Register.css"
+import API from "../backend/conexion.js";
 
 const EyeIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
@@ -27,7 +27,7 @@ function Register() {
   useEffect(() => {
     const fetchSucursales = async () => {
       try {
-        const res = await axios.get('http://localhost:3000/api/sucursales');
+       const res = await API.get('/sucursales');
         setSucursales(res.data);
       } catch (err) {
         console.error('Error al cargar sucursales:', err);
@@ -46,8 +46,7 @@ function Register() {
     setSuccess('');
 
     try {
-      const response = await axios.post('http://localhost:3000/api/usuarios/register', formData);
-
+     const response = await API.post('/usuarios/register', formData);
       setSuccess(response.data.message + " Redirigiendo al login...");
 
       setTimeout(() => {

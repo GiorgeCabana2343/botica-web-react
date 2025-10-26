@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import API from '../../backend/conexion.js';
 import "./ActualizarStock.css"; 
+import API from "../../backend/conexion.js";
 
 function Modal({ isOpen, onClose, children }) {
   if (!isOpen) return null;
@@ -37,9 +37,8 @@ function ActualizarStock() {
     setLoading(true);
     setError(null);
     try {
-      const url = `http://localhost:3000/api/medicamentos/ignoreStock/${idSucursal}`;
-      const response = await API.get(url);
-      setMedicamentos(response.data);
+      const repuesta = await API.get(`/medicamentos/ignoreStock/${idSucursal}`);
+      setMedicamentos(repuesta.data);
     } catch (err) {
       console.error("Error fetching medicamentos:", err);
       setError('No se pudieron cargar los medicamentos.');
@@ -85,7 +84,7 @@ function ActualizarStock() {
         idSucursal: idSucursal
       };
 
-      await API.put(`http://localhost:3000/api/medicamentos/${selectedMedicamento.id}/stock`, payload);
+      await API.put(`/medicamentos/${selectedMedicamento.id}/stock`, payload);
 
       handleCloseModal();
       fetchMedicamentos();

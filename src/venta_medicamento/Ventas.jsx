@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import API from "../../src/backend/conexion.js";
+import { useEffect, useState } from "react";
+import API from "../backend/conexion.js";
 import "./Ventas.css";
 
 export default function Ventas() {
@@ -114,7 +114,7 @@ export default function Ventas() {
           subtotal: p.subtotal,
         })),
       };
-
+      console.log(payload)
       const res = await API.post("/ventas", payload);
       if (res.data.success) {
         mostrarMensaje("✅ Venta registrada correctamente.");
@@ -130,6 +130,7 @@ export default function Ventas() {
       mostrarMensaje("❌ Error al registrar venta.");
     }
   };
+  
 
   const [medicamentoSeleccionado, setMedicamentoSeleccionado] = useState("");
   const [cantidad, setCantidad] = useState(1);
