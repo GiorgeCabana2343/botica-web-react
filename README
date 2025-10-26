@@ -1,4 +1,4 @@
-# Sistema de Gestión de Botica (Frontend)  फार्मेसी
+# Sistema de Gestión de Botica (Frontend) 
 
 Este es el frontend para el proyecto **Botica Web**, un sistema de gestión de inventario y ventas para una farmacia. Esta aplicación está construida con **React**, **Vite** y **TypeScript**.
 
@@ -65,7 +65,7 @@ Sigue estos pasos para levantar el proyecto en tu entorno local.
 
 ## 🔌 Conexión con el Backend
 
-Este frontend **requiere** que el [servidor backend](https://github.com/URL-DE-TU-BACKEND) (Node.js/Express/MySQL) esté en ejecución para funcionar.
+Este frontend **requiere** que el [servidor backend](https://github.com/Zambrano777/backend-node-botica.git) (Node.js/Express/MySQL) esté en ejecución para funcionar.
 
 Por defecto, la aplicación intentará conectarse a la API en `http://localhost:3000/api`. Asegúrate de que tu servidor backend esté corriendo en ese puerto o actualiza la URL base en el archivo de conexión (`src/backend/conexion.js`).
 
