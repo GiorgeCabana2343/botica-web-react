@@ -202,6 +202,7 @@ h2 {
   font-size: 1.1em;
   font-weight: bold;
   color: #333;
+  flex-shrink: 0;
 }
 
 .modal-overlay {
@@ -242,6 +243,7 @@ h2 {
   color: transparent;
   font-weight: bold;
   font-size: 1.4rem;
+  flex-shrink: 0;
 }
 
 .modal.modal-grande {
@@ -253,6 +255,7 @@ h2 {
   flex-direction: column;
   gap: 10px;
   margin-bottom: 20px;
+  flex-shrink: 0;
 }
 
 .registro-inputs select,
@@ -304,6 +307,7 @@ h2 {
   margin-top: 25px;
   padding-top: 15px;
   border-top: 1px solid #eee;
+  flex-shrink: 0;
 }
 
 .btn-guardar {
@@ -336,12 +340,24 @@ h2 {
 
 .tabla-productos-wrapper,
 .tabla-detalle-wrapper {
-  max-height: 250px;
+  flex-grow: 1;
+  flex-shrink: 1;
   overflow-y: auto;
+  min-height: 100px;
   margin-bottom: 15px;
   border: 1px solid #eee;
   border-radius: 8px;
+  padding: 5px;
+  background: #fdfdfd;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
+
+.tabla-productos-wrapper::-webkit-scrollbar,
+.tabla-detalle-wrapper::-webkit-scrollbar {
+  display: none;
+}
+
 
 .toast {
   position: fixed;
@@ -634,7 +650,7 @@ h2 {
 
   h2 {
     font-size: 2.1rem;
-    text-align: left;
+    text-align: center;
   }
 
   .filtros {

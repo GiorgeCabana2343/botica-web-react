@@ -209,7 +209,7 @@ export default function Ventas() {
 
               <button onClick={agregarMedicamento} className="btn-agregar">Agregar</button>
             </div>
-
+          <div className="tabla-productos-wrapper">
             <table className="tabla-productos">
               <thead>
                 <tr>
@@ -232,7 +232,7 @@ export default function Ventas() {
                 ))}
               </tbody>
             </table>
-
+            </div>
             <div className="total-venta">
               <strong>Total:</strong> S/ {totalVenta.toFixed(2)}
             </div>
@@ -249,6 +249,7 @@ export default function Ventas() {
         <div className="modal-overlay" onClick={() => setModalDetalle(null)}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
             <h3>Detalle de Venta #{modalDetalle.idVenta}</h3>
+          <div className="tabla-detalle-wrapper"> 
             <table className="tabla-detalle">
               <thead>
                 <tr>
@@ -269,6 +270,7 @@ export default function Ventas() {
                 ))}
               </tbody>
             </table>
+            </div>
             <div className="modal-buttons">
               <button onClick={() => setModalDetalle(null)} className="btn-cancelar">Cerrar</button>
             </div>
